@@ -101,21 +101,14 @@
     </script>
   [/@helpers.head]
   [@helpers.body]
-    [#-- VDB: Login uses mainBoost with full background image and white title --]
-    [@helpers.mainBoost title="" subtitle="" rowClass="row center-xs" colClass="col-xs col-sm-8 col-md-6 col-lg-5 col-xl-4" showCoverImage=true showHeader=false titleClass=""]
-      [#-- VDB: Custom title to match signup page styling (no left padding on desktop) --]
-      <div class="w-full text-left mb-6">
-        <h2 class="font-degular-black vdb-title-white">${theme.message("welcome-back")!"WELCOME BACK!"}</h2>
-      </div>
-      [@helpers.alternativeLogins 
-        clientId=client_id 
-        identityProviders=identityProviders![] 
-        passwordlessEnabled=passwordlessEnabled 
-        bootstrapWebauthnEnabled=bootstrapWebauthnEnabled 
-        idpRedirectState=idpRedirectState 
-        federatedCSRFToken=federatedCSRFToken 
-        showOrDivider=true 
-      /]
+    [#-- Rebranded auth card: two-column layout with marketing copy + Sign In / Create Account tabs --]
+    [@helpers.authCard
+      mode="split"
+      activeTab="signin"
+      eyebrow=theme.message('account-sign-in-eyebrow')
+      headingLine1=theme.message('account-sign-in-heading-line1')
+      headingLine2=theme.message('account-sign-in-heading-line2')
+      description=theme.message('account-sign-in-description')]
       [#-- During a linking work flow, optionally indicate to the user which IdP is being linked. --]
       [#if devicePendingIdPLink?? || pendingIdPLink??]
         <p class="mt-0">
@@ -132,7 +125,7 @@
         [/#if]
         </p>
       [/#if]
-      <form action="${request.contextPath}/oauth2/authorize" method="POST" class="full w-full">
+      <form action="${request.contextPath}/oauth2/authorize" method="POST" class="flex flex-col gap-6 w-full">
         [@helpers.oauthHiddenFields/]
         [@helpers.hidden name="showPasswordField"/]
         [@helpers.hidden name="userVerifyingPlatformAuthenticatorAvailable"/]
@@ -140,36 +133,38 @@
           [@helpers.hidden name="loginId"/]
         [/#if]
 
-        <fieldset class="space-y-6">
+        <fieldset class="flex flex-col gap-4">
           [@helpers.input type="text" name="loginId" id="loginId" label=theme.message("loginId") autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" autofocus=false required=true/]
           [#if showPasswordField]
             [@helpers.input type="password" name="password" id="password" label=theme.message("password") autocomplete="current-password" autofocus=false required=true/]
             [@helpers.captchaBadge showCaptcha=showCaptcha captchaMethod=tenant.captchaConfiguration.captchaMethod siteKey=tenant.captchaConfiguration.siteKey/]
-            <div class="w-full text-left mt-3">
+            <div class="w-full text-left">
               [@helpers.link url="${request.contextPath}/password/forgot" extraParameters=""]<span>${theme.message("forgot-your-password")}</span>[/@helpers.link]
             </div>
-            [#if application.registrationConfiguration.enabled]
-            <div class="w-full text-left mt-2">
-              <span class="font-suisseintl-regular">Don't have an account? [@helpers.link url="${request.contextPath}/oauth2/register" class="underline"]Sign up[/@helpers.link]</span>
-            </div>
-            [/#if]
           [/#if]
-          
-          [@helpers.hidden name="rememberDevice" value="false"/]
 
-          [#-- Spacer for fixed footer --]
-          <div class="h-24"></div>
+          [@helpers.hidden name="rememberDevice" value="false"/]
         </fieldset>
 
-        [#-- VDB: Fixed footer button --]
-        <div class="vdb-fixed-footer">
-          [#if showPasswordField]
-            [@helpers.button text=theme.message("login")/]
-          [#else]
-            [@helpers.button icon="arrow-right" text=theme.message("next")/]
-          [/#if]
-        </div>
+        [#if showPasswordField]
+          [@helpers.button text=theme.message("login")/]
+        [#else]
+          [@helpers.button icon="arrow-right" text=theme.message("next")/]
+        [/#if]
       </form>
+
+      [@helpers.dividerOr/]
+
+      [@helpers.alternativeLogins
+        clientId=client_id
+        identityProviders=identityProviders![]
+        passwordlessEnabled=passwordlessEnabled
+        bootstrapWebauthnEnabled=bootstrapWebauthnEnabled
+        idpRedirectState=idpRedirectState
+        federatedCSRFToken=federatedCSRFToken
+        showOrDivider=false
+      /]
+
       <div>
         [#if showPasswordField && hasDomainBasedIdentityProviders]
           [@helpers.link url="" extraParameters="&showPasswordField=false"]${theme.message("sign-in-as-different-user")}[/@helpers.link]
@@ -179,7 +174,7 @@
      [#if showWebAuthnReauthLink]
        [@helpers.link url="${request.contextPath}/oauth2/webauthn-reauth"] ${theme.message("return-to-webauthn-reauth")} [/@helpers.link]
      [/#if]
-    [/@helpers.mainBoost]
+    [/@helpers.authCard]
 
     [@helpers.footer]
       [#-- Custom footer code goes here --]

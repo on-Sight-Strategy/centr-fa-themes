@@ -1,0 +1,1071 @@
+@import "tailwindcss";
+
+@plugin "daisyui";
+
+/* Generate utility classes for every class name used in the theme templates */
+@source "../tmp/*.ftl";
+
+/* ----------------------------------------------------------------------
+ * Design tokens
+ *
+ * Base brand color palette. Values not listed here fall back to
+ * Tailwind's defaults. `--font-sans` is overridden so the default sans
+ * stack uses Centr's SuisseIntl typeface.
+ *
+ * Rebrand (2026): yellow and charcoal-darkest were updated to the new
+ * brand values, and the "sand" + "charcoal-light" tokens were added for
+ * the new auth card design. See CONTEXT.md for the previous-vs-current
+ * rebrand notes.
+ * ---------------------------------------------------------------------- */
+@theme {
+  --font-sans:
+    "SuisseIntl", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+  --color-yellow: #ffff33;
+  --color-earth-blue-lightest: #bcdff0;
+  --color-green: #2bab38;
+  --color-green-lightest: #effbf0;
+  --color-red: #ba1a1a;
+  --color-red-lightest: #feecec;
+  --color-charcoal-darkest: #1a1818;
+  --color-charcoal-dark: #222121;
+  --color-charcoal-light: #464242;
+  --color-charcoal: #2f2c2c;
+  --color-blue: #1b68bb;
+  --color-orange: #bb761b;
+  --color-orange-lightest: #fcefcf;
+  --color-soft-neutrals-dark: #dfdfec;
+  --color-soft-neutrals: #e6e6ef;
+  --color-soft-neutrals-light: #ebebf3;
+  --color-soft-neutrals-lightest: #f2f2f7;
+  --color-greige-dark: #d9d5cf;
+
+  /* New "sand" tokens for the rebranded auth card */
+  --color-sand-lightest: #edebe7;
+  --color-sand-light: #e5ddcf;
+  --color-sand: #dfd5c3;
+  --color-sand-dark: #d9cdb9;
+}
+
+/* daisyUI semantic color mapping for the theme used by all generated
+ * `.btn-*` / `.input-*` / `.alert-*` etc. component classes. */
+@plugin "daisyui/theme" {
+  name: "centr-light";
+  default: true;
+  color-scheme: light;
+
+  --color-base-100: var(--color-soft-neutrals-lightest);
+  --color-base-200: var(--color-soft-neutrals-light);
+  --color-base-300: var(--color-soft-neutrals);
+  --color-base-content: var(--color-charcoal-dark);
+
+  --color-primary: var(--color-charcoal-dark);
+  --color-primary-content: var(--color-yellow);
+  --color-secondary: var(--color-greige-dark);
+  --color-secondary-content: var(--color-charcoal);
+  --color-accent: var(--color-yellow);
+  --color-accent-content: var(--color-charcoal-dark);
+  --color-neutral: var(--color-charcoal-darkest);
+  --color-neutral-content: var(--color-soft-neutrals-dark);
+
+  --color-info: var(--color-blue);
+  --color-info-content: var(--color-earth-blue-lightest);
+  --color-success: var(--color-green);
+  --color-success-content: var(--color-green-lightest);
+  --color-warning: var(--color-orange);
+  --color-warning-content: var(--color-orange-lightest);
+  --color-error: var(--color-red);
+  --color-error-content: var(--color-red-lightest);
+
+  --radius-selector: 0.25rem;
+  --radius-field: 0.5rem;
+  --radius-box: 0.5rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 1;
+}
+
+/* ----------------------------------------------------------------------
+ * Fonts
+ * ---------------------------------------------------------------------- */
+@font-face {
+  font-family: Degular;
+  src:
+    url(https://prod-cdn.centr.com/deploy/static/fonts/Degular-Black.woff2)
+      format("woff2"),
+    url(https://prod-cdn.centr.com/deploy/static/fonts/Degular-Black.woff)
+      format("woff");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: SuisseIntl;
+  src:
+    url(https://prod-cdn.centr.com/deploy/static/fonts/SuisseIntl-Ultralight-WebM.woff2)
+      format("woff2"),
+    url(https://prod-cdn.centr.com/deploy/static/fonts/SuisseIntl-Ultralight-WebM.woff)
+      format("woff");
+  font-weight: 250;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: SuisseIntl;
+  src:
+    url(https://prod-cdn.centr.com/deploy/static/fonts/SuisseIntl-UltralightItalic-WebM.woff2)
+      format("woff2"),
+    url(https://prod-cdn.centr.com/deploy/static/fonts/SuisseIntl-UltralightItalic-WebM.woff)
+      format("woff");
+  font-weight: 250;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: SuisseIntl;
+  src:
+    url(https://prod-cdn.centr.com/deploy/static/fonts/SuisseIntl-Thin-WebM.woff2)
+      format("woff2"),
+    url(https://prod-cdn.centr.com/deploy/static/fonts/SuisseIntl-Thin-WebM.woff)
+      format("woff");
+  font-weight: 275;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: SuisseIntl;
+  src:
+    url(https://prod-cdn.centr.com/deploy/static/fonts/SuisseIntl-ThinItalic-WebM.woff2)
+      format("woff2"),
+    url(https://prod-cdn.centr.com/deploy/static/fonts/SuisseIntl-ThinItalic-WebM.woff)
+      format("woff");
+  font-weight: 275;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: SuisseIntl;
+  src:
+    url(https://prod-cdn.centr.com/deploy/static/fonts/SuisseIntl-Light-WebM.woff2)
+      format("woff2"),
+    url(https://prod-cdn.centr.com/deploy/static/fonts/SuisseIntl-Light-WebM.woff)
+      format("woff");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: SuisseIntl;
+  src:
+    url(https://prod-cdn.centr.com/deploy/static/fonts/SuisseIntl-LightItalic-WebM.woff2)
+      format("woff2"),
+    url(https://prod-cdn.centr.com/deploy/static/fonts/SuisseIntl-LightItalic-WebM.woff)
+      format("woff");
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: SuisseIntl;
+  src:
+    url(https://prod-cdn.centr.com/deploy/static/fonts/SuisseIntl-Regular-WebM.woff2)
+      format("woff2"),
+    url(https://prod-cdn.centr.com/deploy/static/fonts/SuisseIntl-Regular-WebM.woff)
+      format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: SuisseIntl;
+  src:
+    url(https://prod-cdn.centr.com/deploy/static/fonts/SuisseIntl-RegularItalic-WebM.woff2)
+      format("woff2"),
+    url(https://prod-cdn.centr.com/deploy/static/fonts/SuisseIntl-RegularItalic-WebM.woff)
+      format("woff");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: SuisseIntl;
+  src:
+    url(https://prod-cdn.centr.com/deploy/static/fonts/SuisseIntl-Book-WebM.woff2)
+      format("woff2"),
+    url(https://prod-cdn.centr.com/deploy/static/fonts/SuisseIntl-Book-WebM.woff)
+      format("woff");
+  font-weight: 450;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: SuisseIntl;
+  src:
+    url(https://prod-cdn.centr.com/deploy/static/fonts/SuisseIntl-BookItalic-WebM.woff2)
+      format("woff2"),
+    url(https://prod-cdn.centr.com/deploy/static/fonts/SuisseIntl-BookItalic-WebM.woff)
+      format("woff");
+  font-weight: 450;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: SuisseIntl;
+  src:
+    url(https://prod-cdn.centr.com/deploy/static/fonts/SuisseIntl-Medium-WebM.woff2)
+      format("woff2"),
+    url(https://prod-cdn.centr.com/deploy/static/fonts/SuisseIntl-Medium-WebM.woff)
+      format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: SuisseIntl;
+  src:
+    url(https://prod-cdn.centr.com/deploy/static/fonts/SuisseIntl-MediumItalic-WebM.woff2)
+      format("woff2"),
+    url(https://prod-cdn.centr.com/deploy/static/fonts/SuisseIntl-MediumItalic-WebM.woff)
+      format("woff");
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: SuisseIntl;
+  src:
+    url(https://prod-cdn.centr.com/deploy/static/fonts/SuisseIntl-SemiBold-WebM.woff2)
+      format("woff2"),
+    url(https://prod-cdn.centr.com/deploy/static/fonts/SuisseIntl-SemiBold-WebM.woff)
+      format("woff");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: SuisseIntl;
+  src:
+    url(https://prod-cdn.centr.com/deploy/static/fonts/SuisseIntl-SemiBoldItalic-WebM.woff2)
+      format("woff2"),
+    url(https://prod-cdn.centr.com/deploy/static/fonts/SuisseIntl-SemiBoldItalic-WebM.woff)
+      format("woff");
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: SuisseIntl;
+  src:
+    url(https://prod-cdn.centr.com/deploy/static/fonts/SuisseIntl-Bold-WebM.woff2)
+      format("woff2"),
+    url(https://prod-cdn.centr.com/deploy/static/fonts/SuisseIntl-Bold-WebM.woff)
+      format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: SuisseIntl;
+  src:
+    url(https://prod-cdn.centr.com/deploy/static/fonts/SuisseIntl-BoldItalic-WebM.woff2)
+      format("woff2"),
+    url(https://prod-cdn.centr.com/deploy/static/fonts/SuisseIntl-BoldItalic-WebM.woff)
+      format("woff");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: SuisseIntl;
+  src:
+    url(https://prod-cdn.centr.com/deploy/static/fonts/SuisseIntl-Black-WebM.woff2)
+      format("woff2"),
+    url(https://prod-cdn.centr.com/deploy/static/fonts/SuisseIntl-Black-WebM.woff)
+      format("woff");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: SuisseIntl;
+  src:
+    url(https://prod-cdn.centr.com/deploy/static/fonts/SuisseIntl-BlackItalic-WebM.woff2)
+      format("woff2"),
+    url(https://prod-cdn.centr.com/deploy/static/fonts/SuisseIntl-BlackItalic-WebM.woff)
+      format("woff");
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* NOTE: "Suisse Int'l Mono" (used for eyebrow labels in the new auth card
+ * design) is not yet loaded. Falls back to SuisseIntl until the team
+ * provides the Shopify-hosted font files — see CONTEXT.md. */
+
+/* ----------------------------------------------------------------------
+ * Global / base overrides
+ * ---------------------------------------------------------------------- */
+body {
+  background-color: #f2f2f7;
+}
+
+html,
+* {
+  touch-action: manipulation;
+}
+
+/* ----------------------------------------------------------------------
+ * Buttons & inputs
+ * ---------------------------------------------------------------------- */
+.btn {
+  filter: none !important;
+  background-image: none !important;
+}
+
+.btn-spinner {
+  display: none;
+}
+
+.btn.is-loading .btn-spinner {
+  display: inline-flex;
+}
+
+.btn.is-loading .btn-text,
+.btn.is-loading .btn-icon {
+  display: none;
+}
+
+.btn-primary {
+  color: var(--color-charcoal) !important;
+  background-color: var(--color-yellow) !important;
+  border-color: var(--color-yellow) !important;
+}
+
+.btn-primary:hover:not(:disabled),
+.btn-primary:focus-visible:not(:disabled) {
+  background-color: #c4c212 !important;
+  border-color: #c4c212 !important;
+}
+
+.btn-alt-login {
+  border: 1px solid #cfcfcf;
+  background-color: #fff !important;
+}
+
+.input-bordered {
+  background-color: #fff !important;
+}
+
+.input::placeholder {
+  color: var(--color-charcoal);
+  opacity: 1;
+}
+
+@supports (-webkit-touch-callout: none) {
+  .input,
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}
+
+.password-toggle-btn .icon-hide,
+.password-toggle-btn.showing .icon-show {
+  display: none;
+}
+
+.password-toggle-btn.showing .icon-hide {
+  display: inline;
+}
+
+.password-toggle-btn:focus-visible {
+  outline-offset: 2px;
+  border-radius: 9999px;
+  outline: 2px solid #2563eb;
+}
+
+/* ----------------------------------------------------------------------
+ * Typography helpers
+ * ---------------------------------------------------------------------- */
+.font-degular-black {
+  letter-spacing: 0.75px;
+  text-transform: uppercase;
+  font-family: Degular;
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 0.95;
+}
+
+.font-suisseintl-regular {
+  letter-spacing: 0.2px;
+  text-align: left;
+  font-family: SuisseIntl;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.label-suisseintl-book {
+  letter-spacing: 0.15px;
+  color: var(--color-charcoal);
+  font-family: SuisseIntl, sans-serif;
+  font-size: 12px;
+  font-weight: 450;
+  line-height: 1.3;
+}
+
+.divider-or {
+  align-items: center;
+  width: 100%;
+  margin: 16px 0;
+  display: flex;
+}
+
+.divider-line {
+  background: #e0e0e0;
+  flex: 1;
+  height: 1px;
+}
+
+.divider-text {
+  color: var(--color-charcoal);
+  letter-spacing: 0.4px;
+  text-align: center;
+  text-transform: none;
+  margin: 0 16px;
+  font-family: SuisseIntl, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+/* ----------------------------------------------------------------------
+ * Custom checkbox
+ * ---------------------------------------------------------------------- */
+.custom-checkbox-label {
+  cursor: pointer;
+  align-items: center;
+  gap: 10px;
+  display: flex;
+  position: relative;
+}
+
+.custom-checkbox-box {
+  box-sizing: border-box;
+  background: #fff;
+  border: 2px solid #b4ab9e;
+  border-radius: 6px;
+  width: 24px;
+  height: 24px;
+  transition:
+    background 0.2s,
+    border-color 0.2s;
+  display: inline-block;
+  position: relative;
+}
+
+.custom-checkbox-input:checked + .custom-checkbox-box {
+  background: var(--color-charcoal);
+  border-color: var(--color-charcoal);
+}
+
+.custom-checkbox-box:after {
+  content: "";
+  border: 2.5px solid #fff;
+  border-width: 0 2.5px 2.5px 0;
+  border-radius: 0.5px;
+  width: 6px;
+  height: 12px;
+  display: none;
+  position: absolute;
+  top: 3px;
+  left: 7px;
+  transform: rotate(45deg);
+}
+
+.custom-checkbox-input:checked + .custom-checkbox-box:after {
+  display: block;
+}
+
+/* ----------------------------------------------------------------------
+ * Previous rebrand ("VDB") cover-image card layout
+ *
+ * Used by `mainBoost`. See CONTEXT.md for previous-vs-current rebrand
+ * notes — these remain in place for pages not yet migrated to `authCard`.
+ * ---------------------------------------------------------------------- */
+.vdb-input-glass {
+  -webkit-backdrop-filter: blur(24px);
+  background-color: #fff3 !important;
+  border: 1px solid #ffffff4d !important;
+  box-shadow: 0 12px 20px #00000040 !important;
+}
+
+.vdb-title-brand {
+  color: var(--color-yellow) !important;
+  font-family: SuisseIntl, sans-serif !important;
+  font-weight: 900 !important;
+}
+
+.vdb-title-white {
+  color: #fff !important;
+  font-family: SuisseIntl, sans-serif !important;
+  font-weight: 900 !important;
+}
+
+.relative.min-h-screen .font-degular-black {
+  text-align: left !important;
+  font-family: SuisseIntl, sans-serif !important;
+  font-weight: 900 !important;
+}
+
+.relative.min-h-screen .input,
+.relative.min-h-screen .input-bordered {
+  -webkit-backdrop-filter: blur(24px);
+  color: #fff !important;
+  background-color: #fff3 !important;
+  border: 1px solid #ffffff4d !important;
+  box-shadow: 0 12px 20px #00000040 !important;
+}
+
+.relative.min-h-screen .input::placeholder {
+  color: #ffffffe6 !important;
+}
+
+.relative.min-h-screen .btn-primary {
+  color: var(--color-charcoal) !important;
+  background-color: var(--color-yellow) !important;
+  border-color: var(--color-yellow) !important;
+}
+
+.relative.min-h-screen .btn-primary:hover:not(:disabled),
+.relative.min-h-screen .btn-primary:focus-visible:not(:disabled) {
+  background-color: #c4c212 !important;
+  border-color: #c4c212 !important;
+}
+
+.relative.min-h-screen .btn-alt-login {
+  -webkit-backdrop-filter: blur(24px);
+  color: #fff !important;
+  background-color: #fff3 !important;
+  border: 1px solid #ffffff4d !important;
+}
+
+.relative.min-h-screen a:not(.btn) {
+  color: #fff;
+}
+
+.relative.min-h-screen .custom-checkbox-box {
+  background: none;
+  border-color: #ffffff80;
+}
+
+.relative.min-h-screen .custom-checkbox-label {
+  color: #fff !important;
+}
+
+.relative.min-h-screen .custom-checkbox-input:checked + .custom-checkbox-box {
+  background: none !important;
+  border-color: var(--color-yellow) !important;
+}
+
+.relative.min-h-screen
+  .custom-checkbox-input:checked
+  + .custom-checkbox-box:after {
+  border-color: var(--color-yellow) !important;
+}
+
+.relative.min-h-screen .divider-line {
+  background: #ffffff4d;
+}
+
+.relative.min-h-screen .divider-text {
+  color: #fff;
+}
+
+.relative.min-h-screen .font-suisseintl-regular {
+  color: #ffffffe6;
+  text-align: left !important;
+}
+
+@media (min-width: 768px) {
+  .relative.min-h-screen .font-suisseintl-regular {
+    text-align: left !important;
+  }
+}
+
+.vdb-info-text {
+  color: #6b6b6b;
+}
+
+.relative.min-h-screen .vdb-info-text {
+  color: #fffc !important;
+}
+
+.relative.min-h-screen .password-toggle-btn svg path {
+  fill: #fff !important;
+}
+
+.relative.min-h-screen .input,
+.relative.min-h-screen input {
+  letter-spacing: 0.4px !important;
+  font-family: SuisseIntl, sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  line-height: 140% !important;
+}
+
+.relative.min-h-screen input::placeholder {
+  color: #ffffffe6 !important;
+}
+
+.relative.min-h-screen .form-row > label.label-suisseintl-book {
+  display: none !important;
+}
+
+.vdb-social-btn,
+.vdb-social-btn span,
+.vdb-social-btn .font-suisseintl-regular {
+  letter-spacing: 1.5px !important;
+  text-transform: uppercase !important;
+  font-family: SuisseIntl, sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  line-height: 100% !important;
+}
+
+.vdb-social-btn {
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 12px 20px #00000026;
+  color: #fff !important;
+  background-color: #ffffff26 !important;
+  border: 1px solid #ffffff4d !important;
+}
+
+html:has(.relative.min-h-screen),
+body:has(.relative.min-h-screen) {
+  scrollbar-color: #555 #1a1a1a;
+  background-color: #1a1a1a !important;
+}
+
+html:has(.relative.min-h-screen)::-webkit-scrollbar {
+  width: 8px;
+}
+
+html:has(.relative.min-h-screen)::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+html:has(.relative.min-h-screen)::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 4px;
+}
+
+html:has(.relative.min-h-screen)::-webkit-scrollbar-thumb:hover {
+  background: #777;
+}
+
+.relative.min-h-screen > .absolute.inset-0 {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100vh !important;
+  min-height: -webkit-fill-available !important;
+  position: fixed !important;
+  inset: 0 !important;
+}
+
+.vdb-cover-bg picture {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.vdb-cover-bg picture img {
+  object-fit: cover;
+  object-position: center;
+  width: 100%;
+  height: 100%;
+}
+
+.vdb-optin-panel {
+  z-index: 10;
+  background: #000;
+  border-radius: 32px 32px 0 0;
+  flex-direction: column;
+  gap: 24px;
+  margin: -120px -16px -220px;
+  padding: 24px 40px 220px;
+  display: flex;
+  position: relative;
+  box-shadow: 0 -12px 20px #0003;
+}
+
+.vdb-optin-panel .custom-checkbox-label,
+.vdb-optin-panel .vdb-optin-text {
+  color: #fff;
+  letter-spacing: 0.4px;
+  font-family: SuisseIntl, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 140%;
+}
+
+@media (min-width: 540px) {
+  .vdb-optin-panel {
+    border-radius: 32px;
+    margin: -120px 0 0;
+    padding: 24px 32px 40px;
+  }
+}
+
+.vdb-fixed-footer {
+  padding: 16px 16px calc(40px + env(safe-area-inset-bottom, 0px));
+  z-index: 50;
+  background: #000;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.vdb-fixed-footer .btn {
+  width: 100%;
+  min-height: 48px;
+  letter-spacing: 1.5px !important;
+  text-transform: uppercase !important;
+  font-family: SuisseIntl, sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  line-height: 100% !important;
+}
+
+@media (min-width: 768px) {
+  .vdb-fixed-footer {
+    z-index: auto;
+    background: none;
+    margin-top: 56px;
+    padding: 24px 0;
+    position: relative;
+    bottom: auto;
+    left: auto;
+    right: auto;
+  }
+}
+
+.relative.min-h-screen .alert {
+  -webkit-backdrop-filter: blur(24px);
+  border-radius: 8px;
+  color: #fff !important;
+  background-color: #ffffff26 !important;
+  border: 1px solid #ffffff4d !important;
+  box-shadow: 0 12px 20px #00000040 !important;
+}
+
+.relative.min-h-screen .alert.error {
+  background-color: #ba1a1a4d !important;
+  border: 1px solid #ff646480 !important;
+}
+
+.relative.min-h-screen .alert.info {
+  background-color: #1b68bb4d !important;
+  border: 1px solid #64b4ff80 !important;
+}
+
+.relative.min-h-screen .alert i,
+.relative.min-h-screen .alert p {
+  color: #fff !important;
+}
+
+.relative.min-h-screen .alert.error i {
+  color: #ff6b6b !important;
+}
+
+.relative.min-h-screen .alert .dismiss-button {
+  color: #ffffffb3 !important;
+}
+
+.relative.min-h-screen > .relative.z-10.min-h-screen {
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 120px;
+  overflow-y: auto;
+}
+
+@media (min-width: 768px) {
+  .relative.min-h-screen > .relative.z-10.min-h-screen {
+    padding-bottom: 32px;
+    justify-content: flex-start;
+  }
+
+  .relative.min-h-screen .h-24 {
+    display: none;
+  }
+}
+
+.vdb-logout-progress {
+  background-color: #fff3;
+  border-radius: 2px;
+  width: 100%;
+  height: 4px;
+  margin-top: 24px;
+  overflow: hidden;
+}
+
+.vdb-logout-progress-bar {
+  background-color: var(--color-yellow);
+  width: 0%;
+  height: 100%;
+  animation: linear forwards vdb-progress-fill;
+}
+
+@keyframes vdb-progress-fill {
+  0% {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+/* ----------------------------------------------------------------------
+ * Auth card (current rebrand)
+ *
+ * Full-bleed cover (image or video) with a centered dark card, used by the
+ * `authCard` macro in helpers.ftl. Self-contained — does not reuse the
+ * `.vdb-*` / `.relative.min-h-screen` selectors from the previous rebrand,
+ * so the two layouts can coexist while pages are migrated incrementally.
+ * ---------------------------------------------------------------------- */
+.authcard-page {
+  position: relative;
+  min-height: 100vh;
+  color: #fff;
+}
+
+.authcard-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.authcard-bg picture,
+.authcard-bg video,
+.authcard-bg img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+}
+
+.authcard-content {
+  position: relative;
+  z-index: 10;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+@media (min-width: 768px) {
+  .authcard-content {
+    padding: 32px;
+  }
+}
+
+.authcard-card {
+  width: 100%;
+  background-color: var(--color-charcoal-darkest);
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+.authcard-card.authcard-single {
+  max-width: 480px;
+}
+
+.authcard-card.authcard-split {
+  max-width: 960px;
+}
+
+@media (min-width: 768px) {
+  .authcard-card.authcard-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.authcard-marketing,
+.authcard-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 32px;
+}
+
+@media (min-width: 768px) {
+  .authcard-marketing,
+  .authcard-form {
+    padding: 48px;
+  }
+}
+
+.authcard-eyebrow {
+  /* Falls back to SuisseIntl until Suisse Int'l Mono is loaded — see CONTEXT.md */
+  font-family: SuisseIntl, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-sand);
+}
+
+.authcard-heading {
+  font-family: SuisseIntl, sans-serif;
+  text-transform: uppercase;
+  font-weight: 900;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: 0.01em;
+  color: #fff;
+}
+
+.authcard-description {
+  font-family: SuisseIntl, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--color-sand-lightest);
+}
+
+.authcard-tabs {
+  display: flex;
+  gap: 24px;
+  border-bottom: 1px solid var(--color-charcoal-light);
+}
+
+.authcard-tab {
+  padding-bottom: 12px;
+  text-decoration: none !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-sand) !important;
+  border-bottom: 2px solid transparent;
+}
+
+.authcard-tab-active {
+  color: var(--color-yellow) !important;
+  border-bottom-color: var(--color-yellow);
+}
+
+/* Dark-themed form controls inside the card */
+.authcard-card .label-suisseintl-book {
+  color: var(--color-sand-lightest);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  font-family: SuisseIntl, sans-serif;
+}
+
+.authcard-card .input,
+.authcard-card .input-bordered {
+  background-color: var(--color-charcoal-light) !important;
+  border: 1px solid var(--color-charcoal-light) !important;
+  color: #fff !important;
+}
+
+.authcard-card .input::placeholder {
+  color: var(--color-sand) !important;
+  opacity: 1;
+}
+
+.authcard-card .password-toggle-btn svg path {
+  fill: #fff !important;
+}
+
+.authcard-card .custom-checkbox-box {
+  background: none;
+  border-color: var(--color-sand);
+}
+
+.authcard-card .custom-checkbox-label {
+  color: var(--color-sand-lightest) !important;
+}
+
+.authcard-card .custom-checkbox-input:checked + .custom-checkbox-box {
+  background: var(--color-yellow) !important;
+  border-color: var(--color-yellow) !important;
+}
+
+.authcard-card .custom-checkbox-input:checked + .custom-checkbox-box:after {
+  border-color: var(--color-charcoal-darkest) !important;
+}
+
+.authcard-card a:not(.btn) {
+  color: var(--color-sand-lightest);
+}
+
+.authcard-card .vdb-social-btn {
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+  color: var(--color-sand-lightest) !important;
+  background-color: transparent !important;
+  border: 1px solid var(--color-sand) !important;
+}
+
+.authcard-card .divider-line {
+  background: var(--color-charcoal-light);
+}
+
+.authcard-card .divider-text {
+  color: var(--color-sand);
+}
+
+.authcard-card .font-suisseintl-regular {
+  color: var(--color-sand-lightest);
+}
+
+.authcard-card .vdb-info-text {
+  color: var(--color-sand);
+}
+
+.authcard-card .alert {
+  -webkit-backdrop-filter: blur(24px);
+  border-radius: 8px;
+  color: #fff !important;
+  background-color: #ffffff26 !important;
+  border: 1px solid #ffffff4d !important;
+  box-shadow: 0 12px 20px #00000040 !important;
+}
+
+.authcard-card .alert.error {
+  background-color: #ba1a1a4d !important;
+  border: 1px solid #ff646480 !important;
+}
+
+.authcard-card .alert.info {
+  background-color: #1b68bb4d !important;
+  border: 1px solid #64b4ff80 !important;
+}
+
+.authcard-card .alert i,
+.authcard-card .alert p {
+  color: #fff !important;
+}
+
+.authcard-card .alert.error i {
+  color: #ff6b6b !important;
+}
+
+.authcard-card .alert .dismiss-button {
+  color: #ffffffb3 !important;
+}
+
+/* Social login buttons: 2-column side-by-side layout; suppress legacy h-12 spacer */
+.authcard-card #login-button-container .grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}

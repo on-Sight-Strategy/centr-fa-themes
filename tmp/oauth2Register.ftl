@@ -50,14 +50,21 @@
     [#-- VDB: Two-line title - first line white, second line yellow (brand color) --]
     [#assign isFreeTrial = hasPid && hasLinkRef /]
 
-    [@helpers.mainBoost title="" subtitle="" rowClass="row center-xs" colClass="col-xs col-sm-8 col-md-6 col-lg-5 col-xl-4" showCoverImage=true showHeader=false titleClass=""]
+    [#-- Rebranded auth card: two-column layout with marketing copy + Sign In / Create Account tabs --]
+    [@helpers.authCard
+      mode="split"
+      activeTab="register"
+      eyebrow=theme.message('account-sign-in-eyebrow')
+      headingLine1=theme.message('account-sign-in-heading-line1')
+      headingLine2=theme.message('account-sign-in-heading-line2')
+      description=theme.message('account-sign-in-description')]
       [#-- VDB: Custom two-line title --]
-      <div id="signup-title-container" class="w-full text-left md:text-center mb-6">
+      <div id="signup-title-container" class="w-full text-left mb-2">
         [#if isFreeTrial]
-          <h2 class="font-degular-black vdb-title-brand">${theme.message("register-free-trial")}</h2>
+          <h2 class="font-degular-black text-yellow">${theme.message("register-free-trial")}</h2>
         [#else]
-          <h2 id="signup-title-line1" class="font-degular-black vdb-title-white">${theme.message("register-progress-line1")!"KEEP YOUR PROGRESS GOING."}</h2>
-          <h2 id="signup-title-line2" class="font-degular-black vdb-title-brand">${theme.message("register-progress-line2")!"CREATE YOUR ACCOUNT."}</h2>
+          <h2 id="signup-title-line1" class="font-degular-black">${theme.message("register-progress-line1")!"KEEP YOUR PROGRESS GOING."}</h2>
+          <h2 id="signup-title-line2" class="font-degular-black text-yellow">${theme.message("register-progress-line2")!"CREATE YOUR ACCOUNT."}</h2>
         [/#if]
       </div>
       <script type="text/javascript">
@@ -103,20 +110,6 @@
         [@helpers.hidden name="registrationState"/]
         [@helpers.hidden name="parentEmailRequired"/]
         [@helpers.hidden name="userVerifyingPlatformAuthenticatorAvailable"/]
-
-        [#-- Social login buttons (depends on FusionAuth identity provider configuration) --]
-        [#if identityProviders?has_content]
-          [@helpers.alternativeLogins
-            clientId=client_id
-            identityProviders=identityProviders![]
-            passwordlessEnabled=false
-            bootstrapWebauthnEnabled=false
-            idpRedirectState=idpRedirectState
-            federatedCSRFToken=federatedCSRFToken
-            showOrDivider=true
-          /]
-        [/#if]
-
 
         [#-- Show the Password Validation Rules if there is a field error for 'user.password' --]
         [#if (fieldMessages?keys?seq_contains("user.password")!false) && passwordValidationRules??]
@@ -196,11 +189,6 @@
               <div class="w-full text-left mt-8">
                 <span class="font-suisseintl-regular text-sm">By signing up, you agree to Centr's <a href="${(application.data.privacyPolicyUrl)!'https://centr.com/blog/show/5293/privacy-policy'}" class="underline" target="_blank" rel="noopener noreferrer">Privacy Policy</a> and <a href="${(application.data.termsAndConditionsUrl)!'https://centr.com/blog/show/5294/terms-and-conditions'}" class="underline" target="_blank" rel="noopener noreferrer">Terms & Conditions</a>.</span>
               </div>
-              <div class="w-full flex flex-col items-start justify-center mt-4 mb-6">
-                <span class="font-suisseintl-regular">Already have an account? [@helpers.link url="${request.contextPath}/oauth2/authorize"]Log in[/@helpers.link]</span>
-              </div>
-              [#-- Spacer for fixed footer --]
-              <div class="h-24"></div>
             [#else]
               <div class="mt-5 mb-5"></div>
               [@helpers.button icon="arrow-right" text=theme.message('next')/]
@@ -275,11 +263,6 @@
           <div class="w-full text-left mt-8">
             <span class="font-suisseintl-regular text-sm">By signing up, you agree to Centr's <a href="${(application.data.privacyPolicyUrl)!'https://centr.com/blog/show/5293/privacy-policy'}" class="underline" target="_blank" rel="noopener noreferrer">Privacy Policy</a> and <a href="${(application.data.termsAndConditionsUrl)!'https://centr.com/blog/show/5294/terms-and-conditions'}" class="underline" target="_blank" rel="noopener noreferrer">Terms & Conditions</a>.</span>
           </div>
-          <div class="w-full flex flex-col items-start justify-center mt-4 mb-6">
-            <span class="font-suisseintl-regular">Already have an account? [@helpers.link url="${request.contextPath}/oauth2/authorize"]Log in[/@helpers.link]</span>
-          </div>
-          [#-- Spacer for fixed footer --]
-          <div class="h-24"></div>
         </fieldset>
         [/#if]
         [#-- End Basic Self Service Registration Form --]
@@ -292,13 +275,24 @@
         [/#if]
         [#-- End Self Service Custom Registration Form Step Counter --]
 
-        [#-- VDB: Fixed footer button --]
-        <div class="vdb-fixed-footer">
-          [@helpers.button id="register-button" text=theme.message('register-btn')/]
-        </div>
-
+        [@helpers.button id="register-button" text=theme.message('register-btn')/]
       </form>
-    [/@helpers.mainBoost]
+
+      [#-- Social login buttons (depends on FusionAuth identity provider configuration) --]
+      [#if identityProviders?has_content]
+        [@helpers.dividerOr/]
+
+        [@helpers.alternativeLogins
+          clientId=client_id
+          identityProviders=identityProviders![]
+          passwordlessEnabled=false
+          bootstrapWebauthnEnabled=false
+          idpRedirectState=idpRedirectState
+          federatedCSRFToken=federatedCSRFToken
+          showOrDivider=false
+        /]
+      [/#if]
+    [/@helpers.authCard]
 
     [@helpers.footer]
       [#-- Custom footer code goes here --]

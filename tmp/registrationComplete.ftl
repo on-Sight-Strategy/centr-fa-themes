@@ -10,15 +10,17 @@
     [#-- Custom <head> code goes here --]
   [/@helpers.head]
   [@helpers.body]
-    [@helpers.header]
-      [#-- Custom header code goes here --]
-    [/@helpers.header]
-
-    [@helpers.main title=theme.message('registration-verification-complete-title')]
-      <p>
-        ${theme.message('registration-verification-complete')}
+    [#-- Rebranded auth card: single-column layout --]
+    [@helpers.authCard mode="single"]
+      <h1 class="authcard-heading">${theme.message('registration-complete-title')}</h1>
+      <p class="authcard-description">
+        ${theme.message('registration-complete-description')}
       </p>
-    [/@helpers.main]
+
+      <a href="${request.contextPath}/oauth2/authorize" class="btn btn-primary btn-lg w-full flex items-center justify-center gap-2 uppercase font-bold tracking-wide btn-border-custom">
+        ${theme.message('registration-complete-sign-in-now')}
+      </a>
+    [/@helpers.authCard]
 
     [@helpers.footer]
       [#-- Custom footer code goes here --]

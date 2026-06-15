@@ -1,6 +1,15 @@
 {
+  "scripts": {
+    "build:css": "tailwindcss -i styles/input.css -o tmp/stylesheet.css --minify",
+    "watch:css": "tailwindcss -i styles/input.css -o tmp/stylesheet.css --watch"
+  },
   "dependencies": {
     "@fusionauth/cli": "^1.3.0",
     "dotenv": "^16.0.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.5",
+    "daisyui": "^5.0.0",
+    "tailwindcss": "^4.1.5"
   }
 }

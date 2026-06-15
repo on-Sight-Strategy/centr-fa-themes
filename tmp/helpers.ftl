@@ -766,6 +766,80 @@
 [/#if]
 [/#macro]
 
+[#-- Rebranded auth card layout (current rebrand). Full-bleed cover (image or
+     video) with a centered dark card. mode="split" renders a two-column
+     layout with a marketing-copy column and a Sign In / Create Account tab
+     switcher (used by oauth2Authorize.ftl / oauth2Register.ftl). mode="single"
+     renders just the card with [#nested/] content (used by passwordForgot.ftl,
+     registrationComplete.ftl, and other simple pages). See CONTEXT.md for the
+     previous-vs-current rebrand notes. --]
+[#macro authCard
+    mode="single"
+    activeTab=""
+    coverImageDesktop="https://images.ctfassets.net/c9t7ta4z3not/5Kl7PZvW2mFcGXa0oHtglC/d2155f1be476c182cb3bc9a90823f6f4/desktop_background__med_opt.jpg"
+    coverImageTablet="https://images.ctfassets.net/c9t7ta4z3not/7GLj0ZChymk3KGi7AgjQwn/5b03b8cb33f1d99ecba2a0f079796057/iPad_Background__Tablet_turf_768x1024_3x_v2__3_.png"
+    coverImageMobile="https://images.ctfassets.net/c9t7ta4z3not/4gLXTDY0Jf49ZEpSi0MPWa/3b00a3991135b5167d686ba9b16dba96/Phone_Background_v2__1_.png"
+    coverVideoUrl="https://cdn.shopify.com/videos/c/o/v/9f3b0d7732bc4124abc41f91c9224c7c.mp4"
+    coverVideoPoster=""
+    eyebrow=""
+    headingLine1=""
+    headingLine2=""
+    description=""]
+<div class="authcard-page">
+  <!-- Full Background Cover -->
+  <div class="authcard-bg">
+    [#if coverVideoUrl?has_content]
+      <video autoplay loop muted playsinline [#if coverVideoPoster?has_content]poster="${coverVideoPoster}"[/#if]>
+        <source src="${coverVideoUrl}" type="video/mp4">
+      </video>
+    [#else]
+      <picture>
+        [#if coverImageMobile?has_content]<source srcset="${coverImageMobile}" media="(max-width: 767px)">[/#if]
+        [#if coverImageTablet?has_content]<source srcset="${coverImageTablet}" media="(min-width: 768px) and (max-width: 1023px)">[/#if]
+        <img src="${coverImageDesktop}" alt="Cover image"/>
+      </picture>
+    [/#if]
+  </div>
+
+  <!-- Content -->
+  <div class="authcard-content">
+    <div class="authcard-card authcard-${mode}" data-in-progress>
+      [#if mode == "split"]
+        <div class="authcard-marketing">
+          [#if eyebrow?has_content]
+            <span class="authcard-eyebrow">${eyebrow}</span>
+          [/#if]
+          [#if headingLine1?has_content || headingLine2?has_content]
+            <h1 class="authcard-heading">
+              [#if headingLine1?has_content]<span class="block">${headingLine1}</span>[/#if]
+              [#if headingLine2?has_content]<span class="block">${headingLine2}</span>[/#if]
+            </h1>
+          [/#if]
+          [#if description?has_content]
+            <p class="authcard-description">${description}</p>
+          [/#if]
+        </div>
+        <div class="authcard-form">
+          <div class="authcard-tabs">
+            [@link url="/oauth2/authorize" class="authcard-tab${(activeTab == 'signin')?then(' authcard-tab-active', '')}"]${theme.message('authcard-tab-sign-in')}[/@link]
+            [@link url="/oauth2/register" class="authcard-tab${(activeTab == 'register')?then(' authcard-tab-active', '')}"]${theme.message('authcard-tab-create-account')}[/@link]
+          </div>
+          [@printErrorAlerts rowClass="" colClass="w-full"/]
+          [@printInfoAlerts rowClass="" colClass="w-full"/]
+          [#nested/]
+        </div>
+      [#else]
+        <div class="authcard-form">
+          [@printErrorAlerts rowClass="" colClass="w-full"/]
+          [@printInfoAlerts rowClass="" colClass="w-full"/]
+          [#nested/]
+        </div>
+      [/#if]
+    </div>
+  </div>
+</div>
+[/#macro]
+
 [#macro accountMain rowClass="row center-xs" colClass="col-xs col-sm-8 col-md-6 col-lg-5 col-xl-4" actionURL="" actionText="Go back" actionDirection="back"]
 <main class="page-body container">
   [@printErrorAlerts rowClass colClass/]
@@ -1202,13 +1276,6 @@
         [/#if]
 
       </div>
-
-      [#-- VDB: Extra spacing between social buttons and divider (equivalent to button height) --]
-      <div class="h-12"></div>
-
-      [#if showOrDivider]
-      [@dividerOr/]
-      [/#if]
 
     </div>
   [/#if]
