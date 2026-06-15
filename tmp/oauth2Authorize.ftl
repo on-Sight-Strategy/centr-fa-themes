@@ -1,0 +1,189 @@
+[#ftl/]
+[#setting url_escaping_charset="UTF-8"]
+[#-- @ftlvariable name="application" type="io.fusionauth.domain.Application" --]
+[#-- @ftlvariable name="bootstrapWebauthnEnabled" type="boolean" --]
+[#-- @ftlvariable name="client_id" type="java.lang.String" --]
+[#-- @ftlvariable name="code_challenge" type="java.lang.String" --]
+[#-- @ftlvariable name="code_challenge_method" type="java.lang.String" --]
+[#-- @ftlvariable name="devicePendingIdPLink" type="io.fusionauth.domain.provider.PendingIdPLink" --]
+[#-- @ftlvariable name="federatedCSRFToken" type="java.lang.String" --]
+[#-- @ftlvariable name="hasDomainBasedIdentityProviders" type="boolean" --]
+[#-- @ftlvariable name="identityProviders" type="java.util.Map<java.lang.String, java.util.List<io.fusionauth.domain.provider.BaseIdentityProvider<?>>>" --]
+[#-- @ftlvariable name="idpRedirectState" type="java.lang.String" --]
+[#-- @ftlvariable name="loginId" type="java.lang.String" --]
+[#-- @ftlvariable name="metaData" type="io.fusionauth.domain.jwt.RefreshToken.MetaData" --]
+[#-- @ftlvariable name="nonce" type="java.lang.String" --]
+[#-- @ftlvariable name="passwordlessEnabled" type="boolean" --]
+[#-- @ftlvariable name="pendingIdPLink" type="io.fusionauth.domain.provider.PendingIdPLink" --]
+[#-- @ftlvariable name="redirect_uri" type="java.lang.String" --]
+[#-- @ftlvariable name="rememberDevice" type="boolean" --]
+[#-- @ftlvariable name="response_type" type="java.lang.String" --]
+[#-- @ftlvariable name="scope" type="java.lang.String" --]
+[#-- @ftlvariable name="showCaptcha" type="boolean" --]
+[#-- @ftlvariable name="showPasswordField" type="boolean" --]
+[#-- @ftlvariable name="showWebAuthnReauthLink" type="boolean" --]
+[#-- @ftlvariable name="state" type="java.lang.String" --]
+[#-- @ftlvariable name="tenant" type="io.fusionauth.domain.Tenant" --]
+[#-- @ftlvariable name="tenantId" type="java.util.UUID" --]
+[#-- @ftlvariable name="timezone" type="java.lang.String" --]
+[#-- @ftlvariable name="user_code" type="java.lang.String" --]
+[#-- @ftlvariable name="version" type="java.lang.String" --]
+[#import "../_helpers.ftl" as helpers/]
+
+[@helpers.html]
+  [@helpers.head title="Login | Centr"]
+    <script src="${request.contextPath}/js/jstz-min-1.0.6.js"></script>
+    [@helpers.captchaScripts showCaptcha=showCaptcha captchaMethod=tenant.captchaConfiguration.captchaMethod siteKey=tenant.captchaConfiguration.siteKey/]
+    <script src="${request.contextPath}/js/oauth2/Authorize.js?version=${version}"></script>
+    <script src="${request.contextPath}/js/identityProvider/InProgress.js?version=${version}"></script>
+    [@helpers.alternativeLoginsScript clientId=client_id identityProviders=identityProviders/]
+    <script>
+      Prime.Document.onReady(function() {
+        [#-- This object handles guessing the timezone, filling in the device id of the user, and check for WebAuthn re-authentication support --]
+        new FusionAuth.OAuth2.Authorize();
+      });
+    </script>
+    <script type="text/javascript">
+    /*
+     * Redirect mobile app users to registration page when redirectFusionAuthTo=register flag is present.
+     *
+     * Mobile apps use this flag in redirect_uri to direct users to registration instead of login.
+     * We use sessionStorage to track the redirect and avoid modifying the redirect_uri parameter
+     * to prevent PKCE validation failures in FusionAuth.
+     */
+    (function() {
+        try {
+            var redirectUri = "${redirect_uri!''}";
+            if (redirectUri && redirectUri.includes('redirectFusionAuthTo=register')) {
+                // Check if we've already redirected to prevent loops
+                var hasRedirected = false;
+                try {
+                    hasRedirected = sessionStorage.getItem('redirectFusionAuthToRegister') === 'true';
+                } catch (e) {
+                    // sessionStorage not available, continue with redirect
+                }
+
+                if (!hasRedirected) {
+                    try {
+                        sessionStorage.setItem('redirectFusionAuthToRegister', 'true');
+                    } catch (e) {
+                        // sessionStorage failed, continue with redirect anyway
+                    }
+
+                    var url = new URL(window.location.href);
+                    var newPath = url.pathname.replace('/oauth2/authorize', '/oauth2/register');
+                    url.pathname = newPath;
+                    window.location.replace(url.toString());
+                }
+            }
+        } catch (e) {
+            // Silently fail - don't break the auth flow
+            console.warn('Registration redirect failed:', e);
+        }
+    })();
+
+    /*
+     * Detect Amplitude experiment parameter from redirect_uri and store in sessionStorage for signup page title variation.
+     */
+    (function() {
+        try {
+            var redirectUri = "${redirect_uri!''}";
+            if (redirectUri && redirectUri.includes('experimentAmplitudeVariant=')) {
+                var match = redirectUri.match(/experimentAmplitudeVariant=([^&]+)/);
+                if (match && match[1]) {
+                    sessionStorage.setItem('experimentAmplitudeVariant', decodeURIComponent(match[1]));
+                }
+            }
+        } catch (e) {
+            // Silently fail
+        }
+    })();
+    </script>
+  [/@helpers.head]
+  [@helpers.body]
+    [#-- VDB: Login uses mainBoost with full background image and white title --]
+    [@helpers.mainBoost title="" subtitle="" rowClass="row center-xs" colClass="col-xs col-sm-8 col-md-6 col-lg-5 col-xl-4" showCoverImage=true showHeader=false titleClass=""]
+      [#-- VDB: Custom title to match signup page styling (no left padding on desktop) --]
+      <div class="w-full text-left mb-6">
+        <h2 class="font-degular-black vdb-title-white">${theme.message("welcome-back")!"WELCOME BACK!"}</h2>
+      </div>
+      [@helpers.alternativeLogins 
+        clientId=client_id 
+        identityProviders=identityProviders![] 
+        passwordlessEnabled=passwordlessEnabled 
+        bootstrapWebauthnEnabled=bootstrapWebauthnEnabled 
+        idpRedirectState=idpRedirectState 
+        federatedCSRFToken=federatedCSRFToken 
+        showOrDivider=true 
+      /]
+      [#-- During a linking work flow, optionally indicate to the user which IdP is being linked. --]
+      [#if devicePendingIdPLink?? || pendingIdPLink??]
+        <p class="mt-0">
+        [#if devicePendingIdPLink?? && pendingIdPLink??]
+          ${theme.message('pending-links-login-to-complete', devicePendingIdPLink.identityProviderName, pendingIdPLink.identityProviderName)}
+        [#elseif devicePendingIdPLink??]
+          ${theme.message('pending-link-login-to-complete', devicePendingIdPLink.identityProviderName)}
+        [#else]
+          ${theme.message('pending-link-login-to-complete', pendingIdPLink.identityProviderName)}
+        [/#if]
+        [#-- A pending link can be cancled. If we also have a device link in progress, this cannot be canceled. --]
+        [#if pendingIdPLink??]
+          [@helpers.link url="" extraParameters="&cancelPendingIdpLink=true"]${theme.message("login-cancel-link")}[/@helpers.link]
+        [/#if]
+        </p>
+      [/#if]
+      <form action="${request.contextPath}/oauth2/authorize" method="POST" class="full w-full">
+        [@helpers.oauthHiddenFields/]
+        [@helpers.hidden name="showPasswordField"/]
+        [@helpers.hidden name="userVerifyingPlatformAuthenticatorAvailable"/]
+        [#if showPasswordField && hasDomainBasedIdentityProviders]
+          [@helpers.hidden name="loginId"/]
+        [/#if]
+
+        <fieldset class="space-y-6">
+          [@helpers.input type="text" name="loginId" id="loginId" label=theme.message("loginId") autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" autofocus=false required=true/]
+          [#if showPasswordField]
+            [@helpers.input type="password" name="password" id="password" label=theme.message("password") autocomplete="current-password" autofocus=false required=true/]
+            [@helpers.captchaBadge showCaptcha=showCaptcha captchaMethod=tenant.captchaConfiguration.captchaMethod siteKey=tenant.captchaConfiguration.siteKey/]
+            <div class="w-full text-left mt-3">
+              [@helpers.link url="${request.contextPath}/password/forgot" extraParameters=""]<span>${theme.message("forgot-your-password")}</span>[/@helpers.link]
+            </div>
+            [#if application.registrationConfiguration.enabled]
+            <div class="w-full text-left mt-2">
+              <span class="font-suisseintl-regular">Don't have an account? [@helpers.link url="${request.contextPath}/oauth2/register" class="underline"]Sign up[/@helpers.link]</span>
+            </div>
+            [/#if]
+          [/#if]
+          
+          [@helpers.hidden name="rememberDevice" value="false"/]
+
+          [#-- Spacer for fixed footer --]
+          <div class="h-24"></div>
+        </fieldset>
+
+        [#-- VDB: Fixed footer button --]
+        <div class="vdb-fixed-footer">
+          [#if showPasswordField]
+            [@helpers.button text=theme.message("login")/]
+          [#else]
+            [@helpers.button icon="arrow-right" text=theme.message("next")/]
+          [/#if]
+        </div>
+      </form>
+      <div>
+        [#if showPasswordField && hasDomainBasedIdentityProviders]
+          [@helpers.link url="" extraParameters="&showPasswordField=false"]${theme.message("sign-in-as-different-user")}[/@helpers.link]
+        [/#if]
+      </div>
+
+     [#if showWebAuthnReauthLink]
+       [@helpers.link url="${request.contextPath}/oauth2/webauthn-reauth"] ${theme.message("return-to-webauthn-reauth")} [/@helpers.link]
+     [/#if]
+    [/@helpers.mainBoost]
+
+    [@helpers.footer]
+      [#-- Custom footer code goes here --]
+    [/@helpers.footer]
+
+  [/@helpers.body]
+[/@helpers.html]
