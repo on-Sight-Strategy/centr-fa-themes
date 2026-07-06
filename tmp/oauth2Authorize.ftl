@@ -125,7 +125,7 @@
         [/#if]
         </p>
       [/#if]
-      <form action="${request.contextPath}/oauth2/authorize" method="POST" class="flex flex-col gap-6 w-full">
+      <form action="${request.contextPath}/oauth2/authorize" method="POST" class="flex flex-col gap-3 w-full mt-3">
         [@helpers.oauthHiddenFields/]
         [@helpers.hidden name="showPasswordField"/]
         [@helpers.hidden name="userVerifyingPlatformAuthenticatorAvailable"/]
@@ -133,13 +133,13 @@
           [@helpers.hidden name="loginId"/]
         [/#if]
 
-        <fieldset class="flex flex-col gap-4">
+        <fieldset class="grid lg:grid-cols-2 gap-4">
           [@helpers.input type="text" name="loginId" id="loginId" label=theme.message("loginId") autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" autofocus=false required=true/]
           [#if showPasswordField]
             [@helpers.input type="password" name="password" id="password" label=theme.message("password") autocomplete="current-password" autofocus=false required=true/]
             [@helpers.captchaBadge showCaptcha=showCaptcha captchaMethod=tenant.captchaConfiguration.captchaMethod siteKey=tenant.captchaConfiguration.siteKey/]
-            <div class="w-full text-left">
-              [@helpers.link url="${request.contextPath}/password/forgot" extraParameters=""]<span>${theme.message("forgot-your-password")}</span>[/@helpers.link]
+            <div class="w-full text-center -mt-2.5 lg:col-span-1 lg:col-start-2">
+              [@helpers.link url="${request.contextPath}/password/forgot" extraParameters="" class="!text-[#E5DDCFBF] uppercase !text-xs"]<span>${theme.message("forgot-your-password")}</span>[/@helpers.link]
             </div>
           [/#if]
 
@@ -147,7 +147,7 @@
         </fieldset>
 
         [#if showPasswordField]
-          [@helpers.button text=theme.message("login")/]
+          [@helpers.button icon="arrow-right" text=theme.message("login")/]
         [#else]
           [@helpers.button icon="arrow-right" text=theme.message("next")/]
         [/#if]

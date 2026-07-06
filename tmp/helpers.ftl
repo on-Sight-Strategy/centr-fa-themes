@@ -700,7 +700,7 @@
 
 [#macro mainBoost title="Login" subtitle=" " rowClass="row center-xs" colClass="col-xs col-sm-8 col-md-6 col-lg-5 col-xl-4" showCoverImage=false centerTitle=true showHeader=true titleClass=""]
 [#if showCoverImage]
-  <div class="relative min-h-screen text-[color:white]">
+  <div id="mainBoost" class="relative min-h-screen text-[color:white]">
     <!-- Full Background Cover Image -->
     <div class="absolute inset-0 z-0 vdb-cover-bg">
       <picture>
@@ -812,7 +812,7 @@
           [#if headingLine1?has_content || headingLine2?has_content]
             <h1 class="authcard-heading">
               [#if headingLine1?has_content]<span class="block">${headingLine1}</span>[/#if]
-              [#if headingLine2?has_content]<span class="block">${headingLine2}</span>[/#if]
+              [#if headingLine2?has_content]<span class="block text-yellow">${headingLine2}</span>[/#if]
             </h1>
           [/#if]
           [#if description?has_content]
@@ -965,12 +965,8 @@
 
 [#-- Below are the social login buttons and helpers --]
 [#macro appleButton identityProvider clientId]
- <button type="button" id="apple-login-button" class="apple login-button w-full flex items-center justify-center gap-3 vdb-social-btn rounded-lg h-12 cursor-pointer" data-scope="${identityProvider.lookupScope(clientId)!''}" data-services-id="${identityProvider.lookupServicesId(clientId)}" data-identity-provider-id="${identityProvider.id}">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M15.079 6.999L15.318 7.011C16.748 7.108 18.752 8.024 19.826 9.597C19.9046 9.71215 19.9583 9.84245 19.9835 9.97956C20.0088 10.1167 20.0051 10.2575 19.9727 10.3931C19.9403 10.5287 19.8799 10.6561 19.7954 10.7669C19.7109 10.8778 19.6042 10.9698 19.482 11.037C19.432 11.065 19.11 11.195 18.985 11.254C18.7304 11.3729 18.4885 11.5173 18.263 11.685C17.649 12.146 17.315 12.694 17.321 13.379C17.331 14.264 17.66 14.833 18.228 15.225C18.436 15.368 18.664 15.478 18.894 15.555C19.02 15.598 19.32 15.671 19.338 15.677C19.532 15.7467 19.6997 15.8745 19.8182 16.0432C19.9367 16.2118 20.0002 16.4129 20 16.619C20 19.24 16.96 23 14.714 23C13.924 23 13.442 22.909 12.731 22.685L12.633 22.654C12.17 22.508 11.931 22.462 11.5 22.462C10.98 22.462 10.637 22.522 9.982 22.699L9.785 22.752C9.21 22.905 8.821 22.978 8.285 23C5.536 23 3 17.907 3 13.928C3 10.058 4.786 7.008 8.286 7.008C8.583 7.008 8.884 7.053 9.195 7.136C9.598 7.243 9.969 7.396 10.491 7.644C11.278 8.018 11.439 8.084 11.5 8.084H11.516C11.546 8.081 11.644 8.037 12.572 7.627C13.633 7.16 14.436 6.942 15.318 7.011L15.078 6.999H15.079Z" fill="white"/>
-    <path d="M14 2C14.2652 2 14.5196 2.10536 14.7071 2.29289C14.8946 2.48043 15 2.73478 15 3C15 3.79565 14.6839 4.55871 14.1213 5.12132C13.5587 5.68393 12.7956 6 12 6C11.7348 6 11.4804 5.89464 11.2929 5.70711C11.1054 5.51957 11 5.26522 11 5C11 4.20435 11.3161 3.44129 11.8787 2.87868C12.4413 2.31607 13.2044 2 14 2Z" fill="white"/>
-    </svg>
-   <span class="font-suisseintl-regular text-sm">CONTINUE WITH APPLE</span>
+ <button type="button" id="apple-login-button" class="apple login-button w-full flex items-center justify-center gap-3 vdb-social-btn p-2.5 cursor-pointer" data-scope="${identityProvider.lookupScope(clientId)!''}" data-services-id="${identityProvider.lookupServicesId(clientId)}" data-identity-provider-id="${identityProvider.id}">
+   CONTINUE WITH APPLE
  </button>
 [/#macro]
 
@@ -979,18 +975,15 @@
    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
      <path d="M22 12.0611C22 6.50451 17.5229 2 12 2C6.47715 2 2 6.50451 2 12.0611C2 17.0828 5.65684 21.2452 10.4375 22V14.9694H7.89844V12.0611H10.4375V9.84452C10.4375 7.32296 11.9305 5.93012 14.2146 5.93012C15.3088 5.93012 16.4531 6.12663 16.4531 6.12663V8.60261H15.1922C13.95 8.60261 13.5625 9.37822 13.5625 10.1739V12.0611H16.3359L15.8926 14.9694H13.5625V22C18.3432 21.2452 22 17.0828 22 12.0611Z" fill="#2F2C2C"/>
    </svg>
-<span class="text">Continue with Facebook</span>
+  <span class="text">Continue with Facebook</span>
  </button>
 [/#macro]
 
 [#macro googleButton identityProvider clientId idpRedirectState=""]
   [#-- When using this loginMethod - the Google JavaScript API is not used at all. --]
   [#if identityProvider.lookupLoginMethod(clientId) == "UseRedirect"]
-    <button type="button" id="google-login-button" class="w-full flex items-center justify-center gap-3 vdb-social-btn rounded-lg h-12 cursor-pointer" data-login-method="UseRedirect" data-scope="${identityProvider.lookupScope(clientId)!''}" data-identity-provider-id="${identityProvider.id}">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M10 9.97992e-06C12.2902 -0.00323081 14.5116 0.782906 16.29 2.22601C16.4023 2.31697 16.4936 2.43118 16.5575 2.56079C16.6214 2.6904 16.6565 2.83233 16.6603 2.97679C16.6641 3.12126 16.6365 3.26483 16.5795 3.39762C16.5225 3.53042 16.4374 3.64927 16.33 3.74601L14.82 5.10801C14.6485 5.26247 14.4288 5.35284 14.1982 5.36378C13.9676 5.37471 13.7404 5.30555 13.555 5.16801C12.5382 4.42071 11.3118 4.01299 10.05 4.00283C8.78816 3.99266 7.55527 4.38057 6.52661 5.1114C5.49794 5.84222 4.72587 6.87875 4.32019 8.0736C3.9145 9.26845 3.89584 10.5608 4.26687 11.7669C4.6379 12.9729 5.37972 14.0313 6.38686 14.7915C7.394 15.5517 8.61517 15.9751 9.87674 16.0013C11.1383 16.0276 12.3761 15.6555 13.414 14.9378C14.4519 14.2202 15.2371 13.1936 15.658 12.004L15.659 12H11.999C11.7542 11.9997 11.5181 11.9097 11.3353 11.747C11.1524 11.5842 11.0356 11.3601 11.007 11.117L11 11V9.00001C11 8.73479 11.1054 8.48044 11.2929 8.2929C11.4804 8.10537 11.7348 8.00001 12 8.00001H18.945C19.1912 7.99999 19.4287 8.09079 19.6121 8.255C19.7955 8.41922 19.9119 8.64532 19.939 8.89001C19.979 9.25701 20 9.62701 20 10C20 15.523 15.523 20 10 20C4.477 20 0 15.523 0 10C0 4.47701 4.477 9.97992e-06 10 9.97992e-06Z" fill="white"/>
-        </svg>
-        <span class="font-suisseintl-regular text-sm">CONTINUE WITH GOOGLE</span>
+    <button type="button" id="google-login-button" class="w-full flex items-center justify-center gap-3 vdb-social-btn p-2.5 cursor-pointer" data-login-method="UseRedirect" data-scope="${identityProvider.lookupScope(clientId)!''}" data-identity-provider-id="${identityProvider.id}">
+      CONTINUE WITH GOOGLE
     </button>
   [#else] [#-- UsePopup or UseVendorJavaScript --]
     [#--
@@ -1012,20 +1005,6 @@
 [#macro linkedInBottom identityProvider clientId]
  <button type="button" id="linkedin-login-button" class="flex-1 flex items-center justify-center gap-2 btn-border-custom btn-alt-login rounded-lg h-12 hover:bg-gray-50 cursor-pointer" data-login-method="UseRedirect" data-identity-provider-id="${identityProvider.id}">
    <div>
-     <div class="icon">
-       <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-            viewBox="0 0 382 382" style="enable-background:new 0 0 382 382;" xml:space="preserve">
-       <path style="fill:#0077B7;" d="M347.445,0H34.555C15.471,0,0,15.471,0,34.555v312.889C0,366.529,15.471,382,34.555,382h312.889
-        C366.529,382,382,366.529,382,347.444V34.555C382,15.471,366.529,0,347.445,0z M118.207,329.844c0,5.554-4.502,10.056-10.056,10.056
-        H65.345c-5.554,0-10.056-4.502-10.056-10.056V150.403c0-5.554,4.502-10.056,10.056-10.056h42.806
-        c5.554,0,10.056,4.502,10.056,10.056V329.844z M86.748,123.432c-22.459,0-40.666-18.207-40.666-40.666S64.289,42.1,86.748,42.1
-        s40.666,18.207,40.666,40.666S109.208,123.432,86.748,123.432z M341.91,330.654c0,5.106-4.14,9.246-9.246,9.246H286.73
-        c-5.106,0-9.246-4.14-9.246-9.246v-84.168c0-12.556,3.683-55.021-32.813-55.021c-28.309,0-34.051,29.066-35.204,42.11v97.079
-        c0,5.106-4.139,9.246-9.246,9.246h-44.426c-5.106,0-9.246-4.14-9.246-9.246V149.593c0-5.106,4.14-9.246,9.246-9.246h44.426
-        c5.106,0,9.246,4.14,9.246,9.246v15.655c10.497-15.753,26.097-27.912,59.312-27.912c73.552,0,73.131,68.716,73.131,106.472
-        L341.91,330.654L341.91,330.654z"/>
-       </svg>
-     </div>
      <div class="text">${identityProvider.lookupButtonText(clientId)?trim}</div>
    </div>
  </button>
@@ -1034,16 +1013,6 @@
 [#macro nintendoButton identityProvider clientId]
 <button type="button" id="nintendo-login-button" class="flex-1 flex items-center justify-center gap-2 btn-border-custom btn-alt-login rounded-lg h-12 hover:bg-gray-50 cursor-pointer" data-login-method="UseRedirect" data-scope="${identityProvider.lookupScope(clientId)!''}" data-identity-provider-id="${identityProvider.id}">
   <div>
-    <div class="icon">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192.756 192.756">
-        <g>
-          <path fill="#cc2131" d="M27.305 119.422c-14.669-.004-24.47-10.398-24.47-23.002 0-12.605 9.826-23.119 24.449-23.086h138.189c14.623-.033 24.449 10.481 24.449 23.086 0 12.604-9.803 22.998-24.473 23.002H27.305z"/>
-          <path fill="#fff" d="M27.351 79.005c-11.613.02-18.743 7.783-18.743 17.384 0 9.6 7.084 17.424 18.743 17.381h138.052c11.658.043 18.746-7.781 18.746-17.381 0-9.601-7.131-17.363-18.746-17.384H27.351z"/>
-          <path fill="#cc2131" d="M21.396 85.491h6.756l9.355 15.128-.005-15.128h6.705v21.698h-6.696L28.109 92.06v15.129h-6.716l.003-21.698zM80.674 87.725h6.53v2.919h3.533v2.143h-3.533l.004 14.402h-6.534l.003-14.402h-3.546v-2.141h3.548l-.005-2.921zM47.943 92.761h6.525v14.428h-6.525V92.761zM47.929 85.487h6.539v4.436h-6.539v-4.436zM164.898 99.859s-.004 2.178-.004 3.055c0 2.299-1.357 3.25-2.668 3.25-1.305 0-2.672-.951-2.672-3.25 0-.877.004-3.109.004-3.109s.006-2.133.006-3.01c0-2.29 1.361-3.232 2.662-3.232s2.668.942 2.668 3.232c0 .877 0 2.492.004 3.074v-.01zm-2.621-8.084c-5.264 0-9.531 3.628-9.531 8.104 0 4.473 4.268 8.1 9.531 8.1 5.27 0 9.537-3.627 9.537-8.1 0-4.476-4.267-8.104-9.537-8.104zM144.18 85.491h6.439v21.694h-6.449l-.004-.83c-2.494 1.566-5.316 1.562-7.512.541-.588-.275-4.463-2.135-4.463-7.152 0-3.812 3.596-7.969 8.295-7.557 1.549.138 2.648.702 3.693 1.287l.001-7.983zm.047 14.411v-2.578c0-2.232-1.539-2.8-2.555-2.8-1.041 0-2.561.568-2.561 2.8 0 .736.004 2.572.004 2.572s-.004 1.795-.004 2.564c0 2.23 1.52 2.812 2.561 2.812 1.016 0 2.555-.582 2.555-2.812v-2.558zM69.741 92.094c2.438-.067 7.39 1.53 7.354 7.244-.007 1.012-.002 7.848-.002 7.848h-6.482v-9.475c0-1.259-1.203-2.658-2.979-2.658-1.779 0-3.099 1.399-3.099 2.658l.007 9.475h-6.479l-.005-14.427 6.483-.005s-.007 1.162 0 1.516a7.872 7.872 0 0 1 5.202-2.176zM122.768 92.094c2.434-.067 7.385 1.53 7.354 7.244-.01 1.012-.006 7.848-.006 7.848h-6.482v-9.475c0-1.259-1.201-2.658-2.979-2.658s-3.102 1.399-3.102 2.658l.01 9.475h-6.477l.004-14.427 6.473-.005s-.01 1.162 0 1.516a7.869 7.869 0 0 1 5.205-2.176zM96.816 97.789c-.012-1.262.014-2.106.428-2.832.514-.888 1.451-1.311 2.299-1.315h-.004c.854.004 1.785.427 2.295 1.315.414.725.438 1.57.428 2.832h-5.446zm5.418 4.352s.006.064.006.877c0 2.639-1.736 3.227-2.697 3.227-.965 0-2.732-.588-2.732-3.227 0-.793.01-2.98.01-2.98s12.287.004 12.287 0c0-4.476-4.318-8.183-9.625-8.183-5.304 0-9.607 3.628-9.607 8.099 0 4.477 4.303 8.105 9.607 8.105 4.402 0 8.119-2.514 9.258-5.924l-6.507.006zM172.268 90.654h-.752v-4.941h1.885c1.164 0 1.744.431 1.744 1.404 0 .883-.555 1.268-1.283 1.361l1.404 2.176h-.836l-1.305-2.143h-.857v2.143zm.894-2.778c.635 0 1.197-.044 1.197-.804 0-.611-.555-.726-1.072-.726h-1.02v1.53h.895z"/>
-          <path fill="#cc2131" d="M168.82 88.17c0-2.458 1.996-4.271 4.352-4.271 2.336 0 4.326 1.814 4.326 4.271 0 2.483-1.99 4.295-4.326 4.295-2.356 0-4.352-1.811-4.352-4.295zm4.352 3.581c1.939 0 3.465-1.518 3.465-3.581 0-2.026-1.525-3.558-3.465-3.558-1.959 0-3.488 1.532-3.488 3.558 0 2.064 1.529 3.581 3.488 3.581z"/>
-        </g>
-      </svg>
-    </div>
     <div class="text">${identityProvider.lookupButtonText(clientId)?trim}</div>
   </div>
 </button>
@@ -1052,17 +1021,6 @@
 [#macro twitterButton identityProvider clientId]
  <button type="button" id="twitter-login-button" class="flex-1 flex items-center justify-center gap-2 btn-border-custom btn-alt-login rounded-lg h-12 hover:bg-gray-50 cursor-pointer">
    <div>
-     <div class="icon">
-       <svg version="1.1" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
-         <g>
-           <rect class="cls-1" width="400" height="400"></rect>
-         </g>
-         <g>
-           <path class="cls-2" d="M153.62,301.59c94.34,0,145.94-78.16,145.94-145.94,0-2.22,0-4.43-.15-6.63A104.36,104.36,0,0,0,325,122.47a102.38,102.38,0,0,1-29.46,8.07,51.47,51.47,0,0,0,22.55-28.37,102.79,102.79,0,0,1-32.57,12.45,51.34,51.34,0,0,0-87.41,46.78A145.62,145.62,0,0,1,92.4,107.81a51.33,51.33,0,0,0,15.88,68.47A50.91,50.91,0,0,1,85,169.86c0,.21,0,.43,0,.65a51.31,51.31,0,0,0,41.15,50.28,51.21,51.21,0,0,1-23.16.88,51.35,51.35,0,0,0,47.92,35.62,102.92,102.92,0,0,1-63.7,22A104.41,104.41,0,0,1,75,278.55a145.21,145.21,0,0,0,78.62,23"></path>
-           <rect class="cls-3" width="400" height="400"></rect>
-         </g>
-       </svg>
-     </div>
      <div class="text">${identityProvider.lookupButtonText(clientId)?trim}</div>
    </div>
  </button>
@@ -1182,7 +1140,7 @@
   [#if identityProviders?has_content || passwordlessEnabled || bootstrapWebauthnEnabled]
     <div id="login-button-container" class="login-button-container" data-federated-csrf="${federatedCSRFToken}">
       [#if passwordlessEnabled]
-        <div class="w-full mb-4">
+        <div class="w-full mb-4 hidden">
           [@link url = "/oauth2/passwordless"]
             <button class="w-full flex items-center justify-center gap-2 btn-border-custom btn-alt-login rounded-lg h-12 hover:bg-gray-50">
               <span class="icon"><i class="fa fa-link"></i></span>
@@ -1218,7 +1176,7 @@
       </div>
       [/#if]
 
-      <div class="grid grid-cols-1 gap-3 mb-4">
+      <div class="grid grid-cols-1 gap-3 lg:grid-cols-2">
         [#if identityProviders["Google"]?has_content]
           [@googleButton identityProvider=identityProviders["Google"][0] clientId=clientId idpRedirectState=idpRedirectState/]
         [/#if]
@@ -1330,8 +1288,8 @@
 [/#macro]
 
 [#-- Input field of type. --]
-[#macro input type name id autocapitalize="none" autocomplete="on" autocorrect="off" autofocus=false spellcheck="false" label="" placeholder="" leftAddon="" required=false tooltip="" disabled=false class="" dateTimeFormat="" value="" uncheckedValue=""]
-<div class="form-row">
+[#macro input type name id class autocapitalize="none" autocomplete="on" autocorrect="off" autofocus=false spellcheck="false" label="" placeholder="" leftAddon="" required=false tooltip="" disabled=false class="" dateTimeFormat="" value="" uncheckedValue=""]
+<div class="form-row ${class}">
   [#if type == "checkbox"]
     [@_input_checkbox name=name value=value uncheckedValue=uncheckedValue label=label tooltip=tooltip required=required id=id]
      [#nested]
@@ -1625,10 +1583,12 @@
   [#if name?has_content]name="${name}"[/#if]
   [#if value?has_content]value="${value}"[/#if]
 >
+  <span class="btn-text text-sm">${text}</span>
+
   [#if icon?has_content]
-    <i class="fa fa-${icon} text-lg btn-icon"></i>
+    <i class="fa fa-light fa-${icon} text-lg btn-icon"></i>
   [/#if]
-  <span class="btn-text">${text}</span>
+
   <span class="btn-spinner">
     <svg class="animate-spin" width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
       <circle style="opacity: 0.25" cx="12" cy="12" r="10" stroke="#2f2c2c" stroke-width="4"></circle>
@@ -1641,7 +1601,7 @@
 [#macro link url extraParameters="" class=""]
 <a 
   href="${url}?tenantId=${(tenantId)!''}&client_id=${(client_id)!''}&nonce=${(nonce?url)!''}&pendingIdPLinkId=${(pendingIdPLinkId)!''}&redirect_uri=${(redirect_uri?url)!''}&response_mode=${(response_mode?url)!''}&response_type=${(response_type?url)!''}&scope=${(scope?url)!''}&state=${(state?url)!''}&timezone=${(timezone?url)!''}&metaData.device.name=${(metaData.device.name?url)!''}&metaData.device.type=${(metaData.device.type?url)!''}${(extraParameters!'')?no_esc}&code_challenge=${(code_challenge?url)!''}&code_challenge_method=${(code_challenge_method?url)!''}&user_code=${(user_code?url)!''}"
-  class="underline font-suisseintl-regular text-base ${class}">
+  class="font-suisseintl-regular text-base ${class}">
 [#nested/]
 </a>
 [/#macro]
@@ -1855,7 +1815,7 @@
 [#macro dividerOr]
   <div class="divider-or">
     <span class="divider-line"></span>
-    <span class="divider-text">or continue with</span>
+    <span class="divider-text">or</span>
     <span class="divider-line"></span>
   </div>
 [/#macro]

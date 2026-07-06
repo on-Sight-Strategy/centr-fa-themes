@@ -59,7 +59,7 @@
       headingLine2=theme.message('account-sign-in-heading-line2')
       description=theme.message('account-sign-in-description')]
       [#-- VDB: Custom two-line title --]
-      <div id="signup-title-container" class="w-full text-left mb-2">
+      <div id="signup-title-container" class="hidden w-full text-left mb-2">
         [#if isFreeTrial]
           <h2 class="font-degular-black text-yellow">${theme.message("register-free-trial")}</h2>
         [#else]
@@ -104,7 +104,7 @@
       [/#if]
 
         [#-- End Identity Provider Buttons --]
-      <form action="${request.contextPath}/oauth2/register" method="POST" class="full">
+      <form action="${request.contextPath}/oauth2/register" method="POST" class="flex flex-col gap-3 w-full mt-3 ">
         [@helpers.oauthHiddenFields/]
         [@helpers.hidden name="step"/]
         [@helpers.hidden name="registrationState"/]
@@ -128,7 +128,7 @@
           [/#list]
         [/#if]
         [#if fields?has_content]
-          <fieldset class="space-y-6">
+          <fieldset class="grid lg:grid-cols-2 gap-3">
             [@helpers.hidden name="collectBirthDate"/]
             [#list fields as field]
               [#--
@@ -141,27 +141,33 @@
               [#if (field.key!"")?contains("marketingConsent") || (field.key!"")?contains("marketingOptIn")]
                 [#if helpers.requiresOptInCheckbox()]
                   [#-- UK, EU, Canada, Australia: Show checkbox --]
-                  [@helpers.input type="checkbox" name=field.key id=field.key label=field.name required=false value="true" uncheckedValue="false" /]
+                  [@helpers.input type="checkbox" name=field.key id=field.key class="lg:col-span-2" label=field.name required=false value="true" uncheckedValue="false" /]
                 [#else]
                   [#-- US and other countries: Auto opt-in with informational copy --]
                   [@helpers.hidden name=field.key value="true"/]
-                  <div class="w-full text-left my-4">
-                    <span class="font-suisseintl-regular text-sm vdb-info-text">We'll send you account updates and occasional product news. Unsubscribe anytime.</span>
+                  <div class="w-full text-left lg:col-span-2">
+                    <span class="font-sans text-sm vdb-info-text text-sand-lightest">We'll send you account updates and occasional product news. Unsubscribe anytime.</span>
                   </div>
                 [/#if]
               [#elseif field.control == 'textarea']
-                [@helpers.textarea name=field.key id=field.key label=field.name required=field.required/]
+                [@helpers.textarea name=field.key id=field.key class="lg:col-span-2"  label=field.name required=field.required/]
               [#elseif field.type == 'bool']
-                [@helpers.input type="checkbox" name=field.key id=field.key label=field.name required=field.required value="true" uncheckedValue="false" /]
+                [@helpers.input type="checkbox" name=field.key id=field.key class="lg:col-span-2" label=field.name required=field.required value="true" uncheckedValue="false" /]
               [#elseif field.type == 'select' || field.control == 'select']
-                [@helpers.select name=field.key id=field.key label=field.name required=field.required options=field.options![]/]
+                [@helpers.select name=field.key id=field.key class="lg:col-span-2" label=field.name required=field.required options=field.options![]/]
               [#elseif field.type == 'number']
-                [@helpers.input type="number" name=field.key id=field.key label=field.name required=field.required/]
+                [@helpers.input type="number" name=field.key id=field.key class="lg:col-span-2" label=field.name required=field.required/]
               [#elseif field.key?contains('password')]
-                [@helpers.input type="password" name=field.key id=field.key label=field.name required=field.required placeholder=field.name autofocus=field?is_first autocomplete="new-password"/]
+                [@helpers.input type="password" name=field.key id=field.key class="lg:col-span-2" label=field.name required=field.required placeholder=field.name autofocus=field?is_first autocomplete="new-password"/]
               [#else]
                 [#-- Default to text input for string and other types --]
-                [@helpers.input type="text" name=field.key id=field.key label=field.name required=field.required placeholder=field.name autofocus=field?is_first/]
+                [#if field.key == 'user.firstName']
+                  [@helpers.input type="text" name=field.key id=field.key class="col-span-1" label=field.name required=field.required placeholder=field.name autofocus=field?is_first/]
+                [#elseif field.key == 'user.lastName']
+                  [@helpers.input type="text" name=field.key id=field.key class="col-span-1" label=field.name required=field.required placeholder=field.name autofocus=field?is_first/]
+                [#else]
+                  [@helpers.input type="text" name=field.key id=field.key class="lg:col-span-2" label=field.name required=field.required placeholder=field.name autofocus=field?is_first/]
+                [/#if]
               [/#if]
 
               [#if field.confirm]
@@ -174,20 +180,20 @@
               [#if !hasMarketingConsentField]
                 [#if helpers.requiresOptInCheckbox()]
                   [#-- UK, EU, Canada, Australia: Show checkbox (unchecked by default) --]
-                  [@helpers.input type="checkbox" name="user.data.marketingConsent" id="marketingConsent" value="true" uncheckedValue="false" label="Get training tips straight to your inbox" /]
+                  [@helpers.input type="checkbox" name="user.data.marketingConsent" id="marketingConsent" class="lg:col-span-2" value="true" uncheckedValue="false" label="Get training tips straight to your inbox" /]
                 [#else]
                   [#-- US and other countries: Auto opt-in with informational copy --]
                   [@helpers.hidden name="user.data.marketingConsent" value="true"/]
-                  <div class="w-full text-left my-4">
-                    <span class="font-suisseintl-regular text-sm vdb-info-text">We'll send you account updates and occasional product news. Unsubscribe anytime.</span>
+                  <div class="w-full text-left my-4 lg:col-span-2">
+                    <span class="font-sans text-sm vdb-info-text text-sand-lightest">We'll send you account updates and occasional product news. Unsubscribe anytime.</span>
                   </div>
                 [/#if]
               [/#if]
               [@helpers.captchaBadge showCaptcha=showCaptcha captchaMethod=tenant.captchaConfiguration.captchaMethod siteKey=tenant.captchaConfiguration.siteKey/]
               [@helpers.hidden name="rememberDevice" value="false"/]
               [#-- Terms consent checkbox replaced with acceptance statement per CX-7665 --]
-              <div class="w-full text-left mt-8">
-                <span class="font-suisseintl-regular text-sm">By signing up, you agree to Centr's <a href="${(application.data.privacyPolicyUrl)!'https://centr.com/blog/show/5293/privacy-policy'}" class="underline" target="_blank" rel="noopener noreferrer">Privacy Policy</a> and <a href="${(application.data.termsAndConditionsUrl)!'https://centr.com/blog/show/5294/terms-and-conditions'}" class="underline" target="_blank" rel="noopener noreferrer">Terms & Conditions</a>.</span>
+              <div class="w-full text-left lg:col-span-2">
+                <span class="font-sans text-sm text-sand-lightest">By signing up, you agree to Centr's <a href="${(application.data.privacyPolicyUrl)!'https://centr.com/blog/show/5293/privacy-policy'}" class="underline" target="_blank" rel="noopener noreferrer">Privacy Policy</a> and <a href="${(application.data.termsAndConditionsUrl)!'https://centr.com/blog/show/5294/terms-and-conditions'}" class="underline" target="_blank" rel="noopener noreferrer">Terms & Conditions</a>.</span>
               </div>
             [#else]
               <div class="mt-5 mb-5"></div>
@@ -227,41 +233,43 @@
             application.registrationConfiguration.preferredLanguages.enabled ]
               <div class="mt-5 mb-5"></div>
               [#if application.registrationConfiguration.firstName.enabled]
-                [@helpers.input type="text" name="user.firstName" id="firstName" label=theme.message('firstName') placeholder=theme.message('firstName') required=application.registrationConfiguration.firstName.required/]
+                [@helpers.input type="text" name="user.firstName" id="firstName" class="col-span-1" label=theme.message('firstName') placeholder=theme.message('firstName') required=application.registrationConfiguration.firstName.required/]
               [/#if]
               [#if application.registrationConfiguration.fullName.enabled]
-                [@helpers.input type="text" name="user.fullName" id="fullName" label=theme.message('fullName') placeholder=theme.message('fullName') required=application.registrationConfiguration.fullName.required/]
+                [@helpers.input type="text" name="user.fullName" id="fullName" class="lg:col-span-2" label=theme.message('fullName') placeholder=theme.message('fullName') required=application.registrationConfiguration.fullName.required/]
               [/#if]
               [#if application.registrationConfiguration.middleName.enabled]
-                [@helpers.input type="text" name="user.middleName" id="middleName" label=theme.message('middleName') placeholder=theme.message('middleName') required=application.registrationConfiguration.middleName.required/]
+                [@helpers.input type="text" name="user.middleName" id="middleName" class="col-span-1" label=theme.message('middleName') placeholder=theme.message('middleName') required=application.registrationConfiguration.middleName.required/]
               [/#if]
               [#if application.registrationConfiguration.lastName.enabled]
-                [@helpers.input type="text" name="user.lastName" id="lastName" label=theme.message('lastName') placeholder=theme.message('lastName') required=application.registrationConfiguration.lastName.required/]
+                [@helpers.input type="text" name="user.lastName" id="lastName" class="col-span-1" label=theme.message('lastName') placeholder=theme.message('lastName') required=application.registrationConfiguration.lastName.required/]
               [/#if]
               [#if application.registrationConfiguration.birthDate.enabled && !hideBirthDate]
-                [@helpers.input type="text" name="user.birthDate" id="birthDate" label=theme.message('birthDate') class="date-picker" dateTimeFormat="yyyy-MM-dd" placeholder=theme.message('birthDate') required=application.registrationConfiguration.birthDate.required/]
+                [@helpers.input type="text" name="user.birthDate" id="birthDate" class="lg:col-span-2" label=theme.message('birthDate') class="date-picker" dateTimeFormat="yyyy-MM-dd" placeholder=theme.message('birthDate') required=application.registrationConfiguration.birthDate.required/]
               [/#if]
               [#if application.registrationConfiguration.mobilePhone.enabled]
-                [@helpers.input type="text" name="user.mobilePhone" id="mobilePhone" label=theme.message('mobilePhone') placeholder=theme.message('mobilePhone') required=application.registrationConfiguration.mobilePhone.required/]
+                [@helpers.input type="text" name="user.mobilePhone" id="mobilePhone" class="lg:col-span-2" label=theme.message('mobilePhone') placeholder=theme.message('mobilePhone') required=application.registrationConfiguration.mobilePhone.required/]
               [/#if]
             [/#if]
           [/#if]
+
           [#-- Regional marketing consent: Checkbox for UK/EU/CAN/AUS, auto opt-in with info text for others --]
           [#if helpers.requiresOptInCheckbox()]
             [#-- UK, EU, Canada, Australia: Show checkbox (unchecked by default) --]
-            [@helpers.input type="checkbox" name="user.data.marketingConsent" id="marketingConsent" value="true" uncheckedValue="false" label="Get training tips straight to your inbox" /]
+            [@helpers.input type="checkbox" name="user.data.marketingConsent" id="marketingConsent" class="lg:col-span-2" value="true" uncheckedValue="false" label="Get training tips straight to your inbox" /]
           [#else]
             [#-- US and other countries: Auto opt-in with informational copy --]
             [@helpers.hidden name="user.data.marketingConsent" value="true"/]
-            <div class="w-full text-left my-4">
-              <span class="font-suisseintl-regular text-sm vdb-info-text">We'll send you account updates and occasional product news. Unsubscribe anytime.</span>
+            <div class="w-full text-left my-4 lg:col-span-2">
+              <span class="font-sans text-sm vdb-info-text">We'll send you account updates and occasional product news. Unsubscribe anytime.</span>
             </div>
           [/#if]
+
           [@helpers.captchaBadge showCaptcha=showCaptcha captchaMethod=tenant.captchaConfiguration.captchaMethod siteKey=tenant.captchaConfiguration.siteKey/]
           [@helpers.hidden name="rememberDevice" value="false"/]
           [#-- Terms consent checkbox replaced with acceptance statement per CX-7665 --]
-          <div class="w-full text-left mt-8">
-            <span class="font-suisseintl-regular text-sm">By signing up, you agree to Centr's <a href="${(application.data.privacyPolicyUrl)!'https://centr.com/blog/show/5293/privacy-policy'}" class="underline" target="_blank" rel="noopener noreferrer">Privacy Policy</a> and <a href="${(application.data.termsAndConditionsUrl)!'https://centr.com/blog/show/5294/terms-and-conditions'}" class="underline" target="_blank" rel="noopener noreferrer">Terms & Conditions</a>.</span>
+          <div class="w-full text-left mt-8 lg:col-span-2">
+            <span class="font-sans text-sm">By signing up, you agree to Centr's <a href="${(application.data.privacyPolicyUrl)!'https://centr.com/blog/show/5293/privacy-policy'}" class="underline" target="_blank" rel="noopener noreferrer">Privacy Policy</a> and <a href="${(application.data.termsAndConditionsUrl)!'https://centr.com/blog/show/5294/terms-and-conditions'}" class="underline" target="_blank" rel="noopener noreferrer">Terms & Conditions</a>.</span>
           </div>
         </fieldset>
         [/#if]
@@ -269,13 +277,13 @@
 
         [#-- Begin Self Service Custom Registration Form Step Counter --]
         [#if step > 0 && totalSteps > 1]
-          <div class="w-full text-center text-sm font-suisseintl-regular text-gray-500 mt-4">
+          <div class="w-full text-center text-sm font-sans text-gray-500 mt-4">
             ${theme.message('register-step', step, totalSteps)}
           </div>
         [/#if]
         [#-- End Self Service Custom Registration Form Step Counter --]
 
-        [@helpers.button id="register-button" text=theme.message('register-btn')/]
+        [@helpers.button id="register-button" icon="arrow-right" text=theme.message('register-btn')/]
       </form>
 
       [#-- Social login buttons (depends on FusionAuth identity provider configuration) --]

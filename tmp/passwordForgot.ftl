@@ -13,7 +13,14 @@
   [@helpers.body]
     [#-- Rebranded auth card: single-column layout --]
     [@helpers.authCard mode="single"]
-      <p class="mb-2">[@helpers.link url="/oauth2/authorize"]&larr; ${theme.message('return-to-login')}[/@helpers.link]</p>
+      <p class="mb-4 pb-4 border-b" style="border-color: #DFD5C34D">
+        [@helpers.link url="/oauth2/authorize" class="flex gap-2 items-center uppercase !font-bold !text-xs"] 
+          <svg width="6" height="8" viewBox="0 0 6 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4.60156 8.10655e-07L0.601563 4L4.60156 8" stroke="#FFFF33" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          ${theme.message('return-to-login')}
+        [/@helpers.link]
+      </p>
 
       <h1 class="authcard-heading">${theme.message('forgot-password-title')!"RESET PASSWORD"}</h1>
       <p class="authcard-description">
@@ -28,11 +35,11 @@
           [@helpers.captchaBadge showCaptcha=showCaptcha captchaMethod=tenant.captchaConfiguration.captchaMethod siteKey=tenant.captchaConfiguration.siteKey/]
         </fieldset>
 
-        [@helpers.button text=theme.message('forgot-password-btn')/]
+        [@helpers.button text=theme.message('forgot-password-btn') icon="arrow-right"/]
       </form>
 
       <p class="mt-2 text-center">
-        <a href="${helpers.frontendUrl('/help')}">${theme.message('forgot-password-contact-support')}</a>
+        <a href="${helpers.frontendUrl('/help')}" class="uppercase underline text-xs">${theme.message('forgot-password-contact-support')}</a>
       </p>
     [/@helpers.authCard]
 

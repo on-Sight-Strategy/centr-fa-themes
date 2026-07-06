@@ -21,7 +21,9 @@
   --font-sans:
     "SuisseIntl", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-
+  --font-mono:
+    "SuisseIntl Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
   --color-yellow: #ffff33;
   --color-earth-blue-lightest: #bcdff0;
   --color-green: #2bab38;
@@ -301,9 +303,23 @@
   font-display: swap;
 }
 
-/* NOTE: "Suisse Int'l Mono" (used for eyebrow labels in the new auth card
- * design) is not yet loaded. Falls back to SuisseIntl until the team
- * provides the Shopify-hosted font files — see CONTEXT.md. */
+@font-face {
+  font-family: SuisseIntl Mono;
+  src: url(https://cdn.shopify.com/s/files/1/0754/7135/6203/files/SuisseIntlMono-Regular-WebS.woff2?v=1778908193)
+    format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: SuisseIntl Mono;
+  src: url(https://cdn.shopify.com/s/files/1/0754/7135/6203/files/SuisseIntlMono-Bold-WebS.woff2?v=1778908200)
+    format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
 
 /* ----------------------------------------------------------------------
  * Global / base overrides
@@ -342,6 +358,7 @@ html,
   color: var(--color-charcoal) !important;
   background-color: var(--color-yellow) !important;
   border-color: var(--color-yellow) !important;
+  border-radius: 2px !important;
 }
 
 .btn-primary:hover:not(:disabled),
@@ -420,7 +437,6 @@ html,
 .divider-or {
   align-items: center;
   width: 100%;
-  margin: 16px 0;
   display: flex;
 }
 
@@ -434,7 +450,7 @@ html,
   color: var(--color-charcoal);
   letter-spacing: 0.4px;
   text-align: center;
-  text-transform: none;
+  text-transform: uppercase;
   margin: 0 16px;
   font-family: SuisseIntl, sans-serif;
   font-size: 14px;
@@ -515,14 +531,14 @@ html,
   font-weight: 900 !important;
 }
 
-.relative.min-h-screen .font-degular-black {
+#mainBoost .font-degular-black {
   text-align: left !important;
   font-family: SuisseIntl, sans-serif !important;
   font-weight: 900 !important;
 }
 
-.relative.min-h-screen .input,
-.relative.min-h-screen .input-bordered {
+#mainBoost .input,
+#mainBoost .input-bordered {
   -webkit-backdrop-filter: blur(24px);
   color: #fff !important;
   background-color: #fff3 !important;
@@ -530,86 +546,80 @@ html,
   box-shadow: 0 12px 20px #00000040 !important;
 }
 
-.relative.min-h-screen .input::placeholder {
+#mainBoost .input::placeholder {
   color: #ffffffe6 !important;
 }
 
-.relative.min-h-screen .btn-primary {
+#mainBoost .btn-primary {
   color: var(--color-charcoal) !important;
   background-color: var(--color-yellow) !important;
   border-color: var(--color-yellow) !important;
 }
 
-.relative.min-h-screen .btn-primary:hover:not(:disabled),
-.relative.min-h-screen .btn-primary:focus-visible:not(:disabled) {
+#mainBoost .btn-primary:hover:not(:disabled),
+#mainBoost .btn-primary:focus-visible:not(:disabled) {
   background-color: #c4c212 !important;
   border-color: #c4c212 !important;
 }
 
-.relative.min-h-screen .btn-alt-login {
+#mainBoost .btn-alt-login {
   -webkit-backdrop-filter: blur(24px);
   color: #fff !important;
   background-color: #fff3 !important;
   border: 1px solid #ffffff4d !important;
 }
 
-.relative.min-h-screen a:not(.btn) {
+#mainBoost a:not(.btn) {
   color: #fff;
 }
 
-.relative.min-h-screen .custom-checkbox-box {
+#mainBoost .custom-checkbox-box {
   background: none;
   border-color: #ffffff80;
 }
 
-.relative.min-h-screen .custom-checkbox-label {
+#mainBoost .custom-checkbox-label {
   color: #fff !important;
 }
 
-.relative.min-h-screen .custom-checkbox-input:checked + .custom-checkbox-box {
+#mainBoost .custom-checkbox-input:checked + .custom-checkbox-box {
   background: none !important;
   border-color: var(--color-yellow) !important;
 }
 
-.relative.min-h-screen
-  .custom-checkbox-input:checked
-  + .custom-checkbox-box:after {
+#mainBoost .custom-checkbox-input:checked + .custom-checkbox-box:after {
   border-color: var(--color-yellow) !important;
 }
 
-.relative.min-h-screen .divider-line {
+#mainBoost .divider-line {
   background: #ffffff4d;
 }
 
-.relative.min-h-screen .divider-text {
+#mainBoost .divider-text {
   color: #fff;
 }
 
-.relative.min-h-screen .font-suisseintl-regular {
+#mainBoost .font-suisseintl-regular {
   color: #ffffffe6;
   text-align: left !important;
 }
 
 @media (min-width: 768px) {
-  .relative.min-h-screen .font-suisseintl-regular {
+  #mainBoost .font-suisseintl-regular {
     text-align: left !important;
   }
 }
 
-.vdb-info-text {
-  color: #6b6b6b;
-}
-
-.relative.min-h-screen .vdb-info-text {
+#mainBoost .vdb-info-text {
   color: #fffc !important;
 }
 
-.relative.min-h-screen .password-toggle-btn svg path {
+#mainBoost .password-toggle-btn svg path {
   fill: #fff !important;
 }
 
-.relative.min-h-screen .input,
-.relative.min-h-screen input {
+#mainBoost .input,
+#mainBoost input {
   letter-spacing: 0.4px !important;
   font-family: SuisseIntl, sans-serif !important;
   font-size: 14px !important;
@@ -617,11 +627,11 @@ html,
   line-height: 140% !important;
 }
 
-.relative.min-h-screen input::placeholder {
+#mainBoost input::placeholder {
   color: #ffffffe6 !important;
 }
 
-.relative.min-h-screen .form-row > label.label-suisseintl-book {
+#mainBoost .form-row > label.label-suisseintl-book {
   display: none !important;
 }
 
@@ -644,30 +654,30 @@ html,
   border: 1px solid #ffffff4d !important;
 }
 
-html:has(.relative.min-h-screen),
-body:has(.relative.min-h-screen) {
+html:has(#mainBoost),
+body:has(#mainBoost) {
   scrollbar-color: #555 #1a1a1a;
   background-color: #1a1a1a !important;
 }
 
-html:has(.relative.min-h-screen)::-webkit-scrollbar {
+html:has(#mainBoost)::-webkit-scrollbar {
   width: 8px;
 }
 
-html:has(.relative.min-h-screen)::-webkit-scrollbar-track {
+html:has(#mainBoost)::-webkit-scrollbar-track {
   background: #1a1a1a;
 }
 
-html:has(.relative.min-h-screen)::-webkit-scrollbar-thumb {
+html:has(#mainBoost)::-webkit-scrollbar-thumb {
   background: #555;
   border-radius: 4px;
 }
 
-html:has(.relative.min-h-screen)::-webkit-scrollbar-thumb:hover {
+html:has(#mainBoost)::-webkit-scrollbar-thumb:hover {
   background: #777;
 }
 
-.relative.min-h-screen > .absolute.inset-0 {
+#mainBoost > .absolute.inset-0 {
   width: 100% !important;
   height: 100% !important;
   min-height: 100vh !important;
@@ -754,7 +764,7 @@ html:has(.relative.min-h-screen)::-webkit-scrollbar-thumb:hover {
   }
 }
 
-.relative.min-h-screen .alert {
+#mainBoost .alert {
   -webkit-backdrop-filter: blur(24px);
   border-radius: 8px;
   color: #fff !important;
@@ -763,42 +773,42 @@ html:has(.relative.min-h-screen)::-webkit-scrollbar-thumb:hover {
   box-shadow: 0 12px 20px #00000040 !important;
 }
 
-.relative.min-h-screen .alert.error {
+#mainBoost .alert.error {
   background-color: #ba1a1a4d !important;
   border: 1px solid #ff646480 !important;
 }
 
-.relative.min-h-screen .alert.info {
+#mainBoost .alert.info {
   background-color: #1b68bb4d !important;
   border: 1px solid #64b4ff80 !important;
 }
 
-.relative.min-h-screen .alert i,
-.relative.min-h-screen .alert p {
+#mainBoost .alert i,
+#mainBoost .alert p {
   color: #fff !important;
 }
 
-.relative.min-h-screen .alert.error i {
+#mainBoost .alert.error i {
   color: #ff6b6b !important;
 }
 
-.relative.min-h-screen .alert .dismiss-button {
+#mainBoost .alert .dismiss-button {
   color: #ffffffb3 !important;
 }
 
-.relative.min-h-screen > .relative.z-10.min-h-screen {
+#mainBoost > .relative.z-10.min-h-screen {
   -webkit-overflow-scrolling: touch;
   padding-bottom: 120px;
   overflow-y: auto;
 }
 
 @media (min-width: 768px) {
-  .relative.min-h-screen > .relative.z-10.min-h-screen {
+  #mainBoost > .relative.z-10.min-h-screen {
     padding-bottom: 32px;
     justify-content: flex-start;
   }
 
-  .relative.min-h-screen .h-24 {
+  #mainBoost .h-24 {
     display: none;
   }
 }
@@ -833,7 +843,7 @@ html:has(.relative.min-h-screen)::-webkit-scrollbar-thumb:hover {
  *
  * Full-bleed cover (image or video) with a centered dark card, used by the
  * `authCard` macro in helpers.ftl. Self-contained — does not reuse the
- * `.vdb-*` / `.relative.min-h-screen` selectors from the previous rebrand,
+ * `.vdb-*` / `#mainBoost` selectors from the previous rebrand,
  * so the two layouts can coexist while pages are migrated incrementally.
  * ---------------------------------------------------------------------- */
 .authcard-page {
@@ -843,7 +853,7 @@ html:has(.relative.min-h-screen)::-webkit-scrollbar-thumb:hover {
 }
 
 .authcard-bg {
-  position: absolute;
+  position: fixed;
   inset: 0;
   z-index: 0;
 }
@@ -866,7 +876,7 @@ html:has(.relative.min-h-screen)::-webkit-scrollbar-thumb:hover {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 16px;
+  padding: 24px;
 }
 
 @media (min-width: 768px) {
@@ -878,8 +888,15 @@ html:has(.relative.min-h-screen)::-webkit-scrollbar-thumb:hover {
 .authcard-card {
   width: 100%;
   background-color: var(--color-charcoal-darkest);
-  border-radius: 24px;
+  border-radius: 2px;
   overflow: hidden;
+  padding: 24px;
+}
+
+@media (min-width: 768px) {
+  .authcard-card {
+    padding: 28px;
+  }
 }
 
 .authcard-card.authcard-single {
@@ -887,13 +904,16 @@ html:has(.relative.min-h-screen)::-webkit-scrollbar-thumb:hover {
 }
 
 .authcard-card.authcard-split {
-  max-width: 960px;
+  max-width: 840px;
+  display: grid;
+  gap: 24px;
 }
 
 @media (min-width: 768px) {
   .authcard-card.authcard-split {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 2fr 3fr;
+    gap: 32px;
   }
 }
 
@@ -901,20 +921,11 @@ html:has(.relative.min-h-screen)::-webkit-scrollbar-thumb:hover {
 .authcard-form {
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  padding: 32px;
-}
-
-@media (min-width: 768px) {
-  .authcard-marketing,
-  .authcard-form {
-    padding: 48px;
-  }
+  gap: 12px;
 }
 
 .authcard-eyebrow {
-  /* Falls back to SuisseIntl until Suisse Int'l Mono is loaded — see CONTEXT.md */
-  font-family: SuisseIntl, sans-serif;
+  font-family: var(--font-mono);
   text-transform: uppercase;
   letter-spacing: 0.15em;
   font-size: 12px;
@@ -926,15 +937,16 @@ html:has(.relative.min-h-screen)::-webkit-scrollbar-thumb:hover {
   font-family: SuisseIntl, sans-serif;
   text-transform: uppercase;
   font-weight: 900;
-  font-size: 36px;
-  line-height: 1.1;
   letter-spacing: 0.01em;
   color: #fff;
+
+  @apply text-2xl leading-none;
+  @apply lg:text-[40px] lg:leading-[0.85];
 }
 
 .authcard-description {
   font-family: SuisseIntl, sans-serif;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 400;
   line-height: 1.4;
   color: var(--color-sand-lightest);
@@ -942,21 +954,23 @@ html:has(.relative.min-h-screen)::-webkit-scrollbar-thumb:hover {
 
 .authcard-tabs {
   display: flex;
-  gap: 24px;
-  border-bottom: 1px solid var(--color-charcoal-light);
 }
 
 .authcard-tab {
-  padding-bottom: 12px;
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
   text-decoration: none !important;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  font-size: 14px;
-  font-weight: 700;
+  font-size: 12px;
+  font-weight: 600;
   color: var(--color-sand) !important;
-  border-bottom: 2px solid transparent;
+  border-bottom: 1px solid transparent;
+  border-bottom-color: #dfd5c34d;
 }
-
 .authcard-tab-active {
   color: var(--color-yellow) !important;
   border-bottom-color: var(--color-yellow);
@@ -976,6 +990,8 @@ html:has(.relative.min-h-screen)::-webkit-scrollbar-thumb:hover {
   background-color: var(--color-charcoal-light) !important;
   border: 1px solid var(--color-charcoal-light) !important;
   color: #fff !important;
+  box-shadow: none !important;
+  border-radius: 2px !important;
 }
 
 .authcard-card .input::placeholder {
@@ -1012,9 +1028,13 @@ html:has(.relative.min-h-screen)::-webkit-scrollbar-thumb:hover {
 .authcard-card .vdb-social-btn {
   -webkit-backdrop-filter: none !important;
   box-shadow: none !important;
-  color: var(--color-sand-lightest) !important;
+  color: var(--color-sand-light) !important;
   background-color: transparent !important;
-  border: 1px solid var(--color-sand) !important;
+  border: 1px solid var(--color-sand-light) !important;
+  border-radius: 0px !important;
+  font-size: 12px !important;
+  text-transform: uppercase !important;
+  font-weight: 700 !important;
 }
 
 .authcard-card .divider-line {
@@ -1027,10 +1047,6 @@ html:has(.relative.min-h-screen)::-webkit-scrollbar-thumb:hover {
 
 .authcard-card .font-suisseintl-regular {
   color: var(--color-sand-lightest);
-}
-
-.authcard-card .vdb-info-text {
-  color: var(--color-sand);
 }
 
 .authcard-card .alert {
@@ -1063,9 +1079,4 @@ html:has(.relative.min-h-screen)::-webkit-scrollbar-thumb:hover {
 
 .authcard-card .alert .dismiss-button {
   color: #ffffffb3 !important;
-}
-
-/* Social login buttons: 2-column side-by-side layout; suppress legacy h-12 spacer */
-.authcard-card #login-button-container .grid {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
