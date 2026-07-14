@@ -14,7 +14,7 @@
     [#-- Rebranded auth card: single-column layout --]
     [@helpers.authCard mode="single"]
       <p class="mb-4 pb-4 border-b" style="border-color: #DFD5C34D">
-        [@helpers.link url="/oauth2/authorize" class="flex gap-2 items-center uppercase !font-bold !text-xs"] 
+        [@helpers.link url="/oauth2/authorize" redirectUri=helpers.originalRedirectUri!'' class="flex gap-2 items-center uppercase !font-bold !text-xs"]
           <svg width="6" height="8" viewBox="0 0 6 8" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M4.60156 8.10655e-07L0.601563 4L4.60156 8" stroke="#FFFF33" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>

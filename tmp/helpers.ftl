@@ -25,6 +25,10 @@
 [#-- @ftlvariable name="user_code" type="java.lang.String" --]
 [#-- @ftlvariable name="version" type="java.lang.String" --]
 
+[#-- Preserved ahead of the password/forgot override below, so links back to the
+     original OAuth flow (e.g. "Return to Login") don't lose the caller's redirect_uri --]
+[#assign originalRedirectUri = (redirect_uri)!'']
+
 [#if request.requestURI?contains("password/forgot")]
 	[#assign redirect_uri="${tenant.data.baseCentrURL}/auth/login"]
 [/#if]
@@ -811,8 +815,8 @@
           [/#if]
           [#if headingLine1?has_content || headingLine2?has_content]
             <h1 class="authcard-heading">
-              [#if headingLine1?has_content]<span class="block">${headingLine1}</span>[/#if]
-              [#if headingLine2?has_content]<span class="block text-yellow">${headingLine2}</span>[/#if]
+              [#if headingLine1?has_content]<span class="block heading-line-1">${headingLine1}</span>[/#if]
+              [#if headingLine2?has_content]<span class="block text-yellow heading-line-2">${headingLine2}</span>[/#if]
             </h1>
           [/#if]
           [#if description?has_content]
@@ -1585,7 +1589,11 @@
 >
   <span class="btn-text text-sm">${text}</span>
 
-  [#if icon?has_content]
+  [#if icon == 'arrow-right']
+    <svg class="w-3.5 h-3.5" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M1 8H15M9.4 15L15 8L9.4 1" stroke="#1A1818" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  [#elseif icon?has_content]
     <i class="fa fa-light fa-${icon} text-lg btn-icon"></i>
   [/#if]
 
@@ -1598,9 +1606,10 @@
 </button>
 [/#macro]
 
-[#macro link url extraParameters="" class=""]
-<a 
-  href="${url}?tenantId=${(tenantId)!''}&client_id=${(client_id)!''}&nonce=${(nonce?url)!''}&pendingIdPLinkId=${(pendingIdPLinkId)!''}&redirect_uri=${(redirect_uri?url)!''}&response_mode=${(response_mode?url)!''}&response_type=${(response_type?url)!''}&scope=${(scope?url)!''}&state=${(state?url)!''}&timezone=${(timezone?url)!''}&metaData.device.name=${(metaData.device.name?url)!''}&metaData.device.type=${(metaData.device.type?url)!''}${(extraParameters!'')?no_esc}&code_challenge=${(code_challenge?url)!''}&code_challenge_method=${(code_challenge_method?url)!''}&user_code=${(user_code?url)!''}"
+[#macro link url extraParameters="" class="" redirectUri=""]
+[#local effectiveRedirectUri = redirectUri?has_content?then(redirectUri, (redirect_uri)!'')]
+<a
+  href="${url}?tenantId=${(tenantId)!''}&client_id=${(client_id)!''}&nonce=${(nonce?url)!''}&pendingIdPLinkId=${(pendingIdPLinkId)!''}&redirect_uri=${(effectiveRedirectUri?url)!''}&login_hint=${(login_hint?url)!''}&response_mode=${(response_mode?url)!''}&response_type=${(response_type?url)!''}&scope=${(scope?url)!''}&state=${(state?url)!''}&timezone=${(timezone?url)!''}&metaData.device.name=${(metaData.device.name?url)!''}&metaData.device.type=${(metaData.device.type?url)!''}${(extraParameters!'')?no_esc}&code_challenge=${(code_challenge?url)!''}&code_challenge_method=${(code_challenge_method?url)!''}&user_code=${(user_code?url)!''}"
   class="font-suisseintl-regular text-base ${class}">
 [#nested/]
 </a>

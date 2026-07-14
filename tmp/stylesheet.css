@@ -1905,6 +1905,9 @@
   .hidden {
     display: none;
   }
+  .h-3\.5 {
+    height: calc(var(--spacing) * 3.5);
+  }
   .h-6 {
     height: calc(var(--spacing) * 6);
   }
@@ -1937,6 +1940,9 @@
   }
   .min-h-screen {
     min-height: 100vh;
+  }
+  .w-3\.5 {
+    width: calc(var(--spacing) * 3.5);
   }
   .w-8 {
     width: calc(var(--spacing) * 8);
@@ -3020,14 +3026,14 @@ html:has(#mainBoost)::-webkit-scrollbar-thumb:hover {
   text-transform: uppercase;
   letter-spacing: 0.15em;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 400;
   color: var(--color-sand);
 }
 .authcard-heading {
   font-family: SuisseIntl, sans-serif;
   text-transform: uppercase;
   font-weight: 900;
-  letter-spacing: 0.01em;
+  letter-spacing: -1.8px;
   color: #fff;
   font-size: var(--text-2xl);
   line-height: var(--tw-leading, var(--text-2xl--line-height));
@@ -3039,6 +3045,11 @@ html:has(#mainBoost)::-webkit-scrollbar-thumb:hover {
   @media (width >= 64rem) {
     --tw-leading: 0.85;
     line-height: 0.85;
+  }
+}
+.authcard-heading.authcard-warranty {
+  @media (width >= 64rem) {
+    font-size: 36px;
   }
 }
 .authcard-description {

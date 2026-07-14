@@ -86,6 +86,39 @@
         }
       })();
       </script>
+
+      <script>
+        Prime.Document.onReady(function() {
+          const redirectURI = "${redirect_uri!''}";
+          const loginHint = "${login_hint!''}";
+          if (!redirectURI.includes('https://shopify.com/authentication') || !loginHint) return;
+
+          const warrantyMessages = { 
+            eyebrow: "Create your account",
+            headingLine1: "${theme.message('warranty-heading-line1')}",
+            headingLine2: "${theme.message('warranty-heading-line2')}",
+            description: "${theme.message('warranty-description')}",
+          }
+
+          const warrantyElements = {
+            eyebrow: document.querySelector('.authcard-eyebrow'),
+            headingLine1: document.querySelector('.heading-line-1'),
+            headingLine2: document.querySelector('.heading-line-2'),
+            description: document.querySelector('.authcard-description'),
+          }
+
+          Object.keys(warrantyElements).forEach(key => {
+            if (warrantyElements[key]){
+              warrantyElements[key].innerText = warrantyMessages[key]
+            }
+          })
+
+          if (document.querySelector('.authcard-heading')){
+            document.querySelector('.authcard-heading').classList.add('authcard-warranty')
+          }
+        });
+      </script>
+
       [#-- During a linking work flow, optionally indicate to the user which IdP is being linked. --]
       [#if devicePendingIdPLink?? || pendingIdPLink??]
         <p class="mt-0">
