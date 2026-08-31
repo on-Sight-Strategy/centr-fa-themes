@@ -83,6 +83,45 @@
     })();
 
     /*
+     * Shopify's external identity provider flow does not forward any parameter
+     * (e.g. prompt=create) that distinguishes a "create account" entry point from
+     * a plain sign-in, so we can't detect intent directly. As a proxy, when
+     * FusionAuth is reached via the Shopify redirect_uri with a login_hint already
+     * populated (Shopify already knows the customer's email, e.g. from the
+     * warranty registration flow), default to the register tab instead of login.
+     */
+    (function() {
+        try {
+            var redirectUri = "${redirect_uri!''}";
+            var loginHint = "${login_hint!''}";
+            if (redirectUri && redirectUri.includes('https://shopify.com/authentication') && loginHint) {
+                var hasRedirected = false;
+                try {
+                    hasRedirected = sessionStorage.getItem('shopifyLoginHintRegisterRedirect') === 'true';
+                } catch (e) {
+                    // sessionStorage not available, continue with redirect
+                }
+
+                if (!hasRedirected) {
+                    try {
+                        sessionStorage.setItem('shopifyLoginHintRegisterRedirect', 'true');
+                    } catch (e) {
+                        // sessionStorage failed, continue with redirect anyway
+                    }
+
+                    var url = new URL(window.location.href);
+                    var newPath = url.pathname.replace('/oauth2/authorize', '/oauth2/register');
+                    url.pathname = newPath;
+                    window.location.replace(url.toString());
+                }
+            }
+        } catch (e) {
+            // Silently fail - don't break the auth flow
+            console.warn('Shopify login_hint register redirect failed:', e);
+        }
+    })();
+
+    /*
      * Detect Amplitude experiment parameter from redirect_uri and store in sessionStorage for signup page title variation.
      */
     (function() {
